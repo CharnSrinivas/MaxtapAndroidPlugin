@@ -1,4 +1,4 @@
-package com.amrit.practice.maxtap;
+package com.maxtap;
 
 import android.app.Activity;
 import android.content.Context;
@@ -126,7 +126,6 @@ public class MaxTap extends AppCompatActivity {
         } else {
             img_width = this.video_player_width * 10 / 100;
         }
-        Log.i("My_tag", img_width + "");
         LayoutParams imageParams = new LayoutParams(img_width, img_width);
         imageParams.setMargins(10, 10, 10, 10);
         imageParams.gravity = Gravity.RIGHT;
@@ -161,7 +160,7 @@ public class MaxTap extends AppCompatActivity {
         } else {
             ad_container_parms.bottomMargin = this.video_player_height * 10 / 100;
         }
-        ad_container_parms.rightMargin = this.video_player_width / 100;
+        ad_container_parms.rightMargin = this.video_player_width / 120;
 
         ((ViewGroup) video_player).addView(ad_container, ad_container_parms);
     }
