@@ -29,9 +29,9 @@ public class MainActivity extends AppCompatActivity {
         //playing the video.
         exoPlayer.play();
 
-        String movieId = "cholalabs_vinveli";
+        String movieId = "test_data";
 
-        new MaxTap(this, this, playerView, exoPlayer, movieId).loadAds();
+        new MaxTap(this, this, playerView, exoPlayer, movieId).init();
     }
 
 }

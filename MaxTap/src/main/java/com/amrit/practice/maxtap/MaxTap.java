@@ -1,6 +1,5 @@
 package com.amrit.practice.maxtap;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,175 +9,225 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.amrit.practice.maxtap.utils.HttpHandler;
+import com.amrit.practice.maxtap.utils.ImageCache;
+import com.google.android.exoplayer2.ExoPlayer;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import com.google.android.exoplayer2.ExoPlayer;
 
-public class MaxTap {
+public class MaxTap extends AppCompatActivity {
 
     Context context;
     Activity activity;
     ImageView imageView;
     TextView textView;
-    FrameLayout framelayout;
-    View player;
-    ArrayList<MovieData> mResult = null;
+    FrameLayout ad_container;
+    View video_player;
+    JSONArray ad_data = null;
     ExoPlayer exoPlayer = null;
     MediaPlayer mediaPlayer = null;
     String movieId;
+    int video_player_width, video_player_height;
+    boolean is_fist_image_loaded = false;
 
     Handler handler = new Handler();
+
+    Runnable adsRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (exoPlayer != null)
+                updateAds(exoPlayer.getCurrentPosition());
+            else if (mediaPlayer != null)
+                updateAds(mediaPlayer.getCurrentPosition());
+
+            handler.postDelayed(adsRunnable, 1000);
+        }
+    };
+
+    Thread loadAndCacheAdImages = new Thread(() -> {
+        try {
+
+            for (int i = 0; i < ad_data.length(); i++) {
+                String url = null;
+                url = ad_data.getJSONObject(i).getString("image_link");
+                // Caching images
+                InputStream is = new URL(url).openStream();
+                Bitmap image = BitmapFactory.decodeStream(is);
+                ImageCache.getInstance().saveBitmapToCache(url, image);
+                if (!is_fist_image_loaded) {
+                    is_fist_image_loaded = true;
+                    startAds();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    });
+
+    Thread fetchRequiredData = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            fetchAdData();
+            loadAndCacheAdImages.start();
+        }
+    });
 
     public MaxTap(Context context, Activity activity, View player, ExoPlayer exoPlayer, String movieId) {
         this.context = context;
         this.activity = activity;
-        this.player = player;
+        this.video_player = player;
         this.exoPlayer = exoPlayer;
         this.movieId = movieId;
     }
 
-    public MaxTap(Context context, Activity activity, View player, MediaPlayer mediaPlayer, String movieId){
+    public MaxTap(Context context, Activity activity, View player, MediaPlayer mediaPlayer, String movieId) {
         this.context = context;
         this.activity = activity;
-        this.player = player;
+        this.video_player = player;
         this.mediaPlayer = mediaPlayer;
         this.movieId = movieId;
     }
 
-    public void loadAds() {
+    public void init() {
+        // Waiting until video player is totally rendered
+
+        video_player.post(() -> {
+            this.video_player_width = video_player.getWidth();
+            this.video_player_height = video_player.getHeight();
+            initializeComponent();
+        });
+        // Asynchronously fetch json ad data and prefetch , cache ad images.
+
+        fetchRequiredData.start();
+    }
+
+    private void initializeComponent() {
         imageView = new ImageView(context);
-        LayoutParams imageParams = new LayoutParams(300, LayoutParams.WRAP_CONTENT);
+        int img_width;
+        if (this.video_player_height > this.video_player_width) {
+            img_width = this.video_player_height * 10 / 100;
+        } else {
+            img_width = this.video_player_width * 10 / 100;
+        }
+        Log.i("My_tag", img_width + "");
+        LayoutParams imageParams = new LayoutParams(img_width, img_width);
         imageParams.setMargins(10, 10, 10, 10);
         imageParams.gravity = Gravity.RIGHT;
         imageView.setLayoutParams(imageParams);
 
         textView = new TextView(context);
-        textView.setTextSize(16);
+        textView.setTextSize(14);
         textView.setTextColor(Color.parseColor("#ffffff"));
         textView.setPadding(20, 0, 0, 0);
         LayoutParams textParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        textParams.setMargins(0,0,300,0);
+        textView.setMaxWidth(2 * img_width);
+        textParams.setMargins(0, 0, img_width, 0);
         textParams.gravity = Gravity.CENTER_VERTICAL;
         textView.setLayoutParams(textParams);
 
-        //Initializing frame layout
-        framelayout = new FrameLayout(context);
-        framelayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        framelayout.setBackgroundColor(Color.argb(60, 0, 0, 0));
+        // Initializing frame layout
+        ad_container = new FrameLayout(context);
+        ad_container.setBackgroundColor(Color.argb(80, 0, 0, 0));
 
-        //Adding views to FrameLayout
-        framelayout.addView(imageView);
-        framelayout.addView(textView);
-        framelayout.setVisibility(View.GONE);
+        // Adding views to FrameLayout
+        ad_container.addView(imageView);
+        ad_container.addView(textView);
+        ad_container.setVisibility(View.GONE);
 
-        LayoutParams params = new LayoutParams(500, 200);
-        params.gravity = Gravity.RIGHT|Gravity.BOTTOM;
-        activity.addContentView(framelayout, params);
+        LayoutParams ad_container_parms = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        gettingJSON.start();
+        ad_container_parms.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+
+        if (this.video_player_height > this.video_player_width) {
+            ad_container_parms.bottomMargin = this.video_player_width * 10 / 100;
+        } else {
+            ad_container_parms.bottomMargin = this.video_player_height * 10 / 100;
+        }
+        ad_container_parms.rightMargin = this.video_player_width / 100;
+
+        ((ViewGroup) video_player).addView(ad_container, ad_container_parms);
     }
 
-    Thread gettingJSON = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            getData();
-            gettingImage.start();
-        }
-    });
-
-    private void getData(){
+    private void fetchAdData() {
         String url = "https://storage.googleapis.com/maxtap-adserver-dev.appspot.com/" + movieId + ".json";
-//        String url = "https://firebasestorage.googleapis.com/v0/b/maxtap-adserver-dev.appspot.com/o/Naagin.json?alt=media&token=7b26b182-2da0-4174-afe0-697fe96ed287";
+        // String url =
+        // "https://firebasestorage.googleapis.com/v0/b/maxtap-adserver-dev.appspot.com/o/Naagin.json?alt=media&token=7b26b182-2da0-4174-afe0-697fe96ed287";
 
         String data = new HttpHandler().makeServiceCall(url);
-        mResult = new ArrayList<>();
 
         try {
-            JSONArray jsonArr = new JSONArray(data);
-            for(int i = 0; i < jsonArr.length(); i++){
-                JSONObject object = jsonArr.getJSONObject(i);
+            ad_data = new JSONArray(data);
+            for (int i = 0; i < ad_data.length(); i++) {
+                JSONObject object = ad_data.getJSONObject(i);
                 int startTime = object.getInt("start_time");
                 int endTime = object.getInt("end_time");
                 String imageUrl = object.getString("image_link");
                 String captionRegionalLanguage = object.getString("caption_regional_language");
                 String productLink = object.getString("product_link");
-                MovieData movie = new MovieData(startTime, endTime, productLink, imageUrl, captionRegionalLanguage);
-                mResult.add(movie);
-                MovieData.sort(mResult);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    Thread gettingImage = new Thread(this::saveImage);
-
-    private void saveImage() {
-        for(MovieData data: mResult){
-            String url = data.getImageLink();
-            try {
-                InputStream is = new URL(url).openStream();
-                Bitmap image = BitmapFactory.decodeStream(is);
-                ImageCache.getInstance().saveBitmapToCache(url, image);
-                updateAds();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void updateAds() {
+    private void startAds() {
         handler.postDelayed(adsRunnable, 1000);
     }
 
-    Runnable adsRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if(exoPlayer != null) updateAds(exoPlayer.getCurrentPosition());
-            else if(mediaPlayer != null) updateAds(mediaPlayer.getCurrentPosition());
-
-            handler.postDelayed(adsRunnable, 1000);
-        }
-    };
-
-    @SuppressLint("QueryPermissionsNeeded")
     private void updateAds(long currentPosition) {
-        currentPosition /= 1000;
-        if(mResult == null) return;
+        try {
+            currentPosition /= 1000;
+            if (ad_data == null)
+                return;
 
-        boolean visible = false;
-        for(MovieData data: mResult){
-            int startTime = data.getStartTime();
-            int endTime = data.getEndTime();
+            boolean visible = false;
 
-            if(currentPosition >= startTime && currentPosition <= endTime){
-                framelayout.setVisibility(View.VISIBLE);
-                String imageLink = data.getImageLink();
-                String msg = data.getCaption();
-                String productLink = data.getProductLink();
-                Bitmap bitmap = ImageCache.getInstance().retrieveBitmapFromCache(imageLink);
-                imageView.setImageBitmap(bitmap);
-                textView.setText(msg);
-                framelayout.setOnClickListener(v -> {
-                    Uri uri = Uri.parse(productLink);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    context.startActivity(intent);
-                });
-                visible = true;
-                break;
+            for (int i = 0; i < ad_data.length(); i++) {
+                JSONObject data = ad_data.getJSONObject(i);
+                int startTime = data.getInt("start_time");
+                int endTime = data.getInt("end_time");
+
+                if (currentPosition >= startTime && currentPosition <= endTime) {
+                    ad_container.setVisibility(View.VISIBLE);
+                    String imageLink = data.getString("image_link");
+                    String msg = data.getString("caption_regional_language");
+                    String redirect_link = data.getString("redirect_link");
+                    Bitmap bitmap = ImageCache.getInstance().retrieveBitmapFromCache(imageLink);
+                    imageView.setImageBitmap(bitmap);
+                    textView.setText(msg);
+                    ad_container.setOnClickListener(v -> {
+                        Uri uri = Uri.parse(redirect_link);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        context.startActivity(intent);
+                    });
+                    visible = true;
+                    break;
+                }
             }
-        }
-        if(!visible) framelayout.setVisibility(View.GONE);
-    }
 
+            if (!visible)
+                ad_container.setVisibility(View.GONE);
+        } catch (Exception e) {
+            Log.e("error", e.toString());
+        }
+
+    }
 }
