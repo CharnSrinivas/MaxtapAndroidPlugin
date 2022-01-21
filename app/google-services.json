@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "449617130912",
+    "project_id": "maxtap-adserver",
+    "storage_bucket": "maxtap-adserver.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449617130912:android:8f021a66c0e97727a4a0c5",
+        "android_client_info": {
+          "package_name": "com.example.maxtap_sdk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "449617130912-hfau1btf5ap0cordppf2c8st0jgknl6c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrH7FqyUTJvTvWr_EFlZ7Mb_dPW6V4tKk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "449617130912-hfau1btf5ap0cordppf2c8st0jgknl6c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
