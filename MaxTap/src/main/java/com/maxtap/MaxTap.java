@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,21 +18,18 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.amrit.practice.maxtap.utils.HttpHandler;
-import com.amrit.practice.maxtap.utils.ImageCache;
+
 import com.google.android.exoplayer2.ExoPlayer;
+import com.maxtap.utils.HttpHandler;
+import com.maxtap.utils.ImageCache;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.net.URL;
 
 public class MaxTap extends AppCompatActivity {
 
     Context context;
-    Activity activity;
     ImageView imageView;
     TextView textView;
     FrameLayout ad_container;
@@ -44,62 +39,16 @@ public class MaxTap extends AppCompatActivity {
     MediaPlayer mediaPlayer = null;
     String movieId;
     int video_player_width, video_player_height;
-    boolean is_fist_image_loaded = false;
 
-    Handler handler = new Handler();
 
-    Runnable adsRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (exoPlayer != null)
-                updateAds(exoPlayer.getCurrentPosition());
-            else if (mediaPlayer != null)
-                updateAds(mediaPlayer.getCurrentPosition());
-
-            handler.postDelayed(adsRunnable, 1000);
-        }
-    };
-
-    Thread loadAndCacheAdImages = new Thread(() -> {
-        try {
-
-            for (int i = 0; i < ad_data.length(); i++) {
-                String url = null;
-                url = ad_data.getJSONObject(i).getString("image_link");
-                // Caching images
-                InputStream is = new URL(url).openStream();
-                Bitmap image = BitmapFactory.decodeStream(is);
-                ImageCache.getInstance().saveBitmapToCache(url, image);
-                if (!is_fist_image_loaded) {
-                    is_fist_image_loaded = true;
-                    startAds();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    });
-
-    Thread fetchRequiredData = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            fetchAdData();
-            loadAndCacheAdImages.start();
-        }
-    });
-
-    public MaxTap(Context context, Activity activity, View player, ExoPlayer exoPlayer, String movieId) {
+    public MaxTap(Context context, View player,  String movieId) {
         this.context = context;
-        this.activity = activity;
         this.video_player = player;
-        this.exoPlayer = exoPlayer;
         this.movieId = movieId;
     }
 
-    public MaxTap(Context context, Activity activity, View player, MediaPlayer mediaPlayer, String movieId) {
+    public MaxTap(Context context,  View player, MediaPlayer mediaPlayer, String movieId) {
         this.context = context;
-        this.activity = activity;
         this.video_player = player;
         this.mediaPlayer = mediaPlayer;
         this.movieId = movieId;
@@ -107,15 +56,29 @@ public class MaxTap extends AppCompatActivity {
 
     public void init() {
         // Waiting until video player is totally rendered
-
         video_player.post(() -> {
             this.video_player_width = video_player.getWidth();
             this.video_player_height = video_player.getHeight();
             initializeComponent();
+//            startAds();
         });
+
         // Asynchronously fetch json ad data and prefetch , cache ad images.
 
-        fetchRequiredData.start();
+        new Thread(()->{
+            String url ;
+            if(movieId.contains(".json")){
+                url = Config.CloudBucketUrl + movieId ;
+            }else{
+                url=Config.CloudBucketUrl + movieId + ".json";
+            }
+            String data = new HttpHandler().makeServiceCall(url);
+            try {
+                ad_data = new JSONArray(data);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private void initializeComponent() {
@@ -165,33 +128,8 @@ public class MaxTap extends AppCompatActivity {
         ((ViewGroup) video_player).addView(ad_container, ad_container_parms);
     }
 
-    private void fetchAdData() {
-        String url = "https://storage.googleapis.com/maxtap-adserver-dev.appspot.com/" + movieId + ".json";
-        // String url =
-        // "https://firebasestorage.googleapis.com/v0/b/maxtap-adserver-dev.appspot.com/o/Naagin.json?alt=media&token=7b26b182-2da0-4174-afe0-697fe96ed287";
 
-        String data = new HttpHandler().makeServiceCall(url);
-
-        try {
-            ad_data = new JSONArray(data);
-            for (int i = 0; i < ad_data.length(); i++) {
-                JSONObject object = ad_data.getJSONObject(i);
-                int startTime = object.getInt("start_time");
-                int endTime = object.getInt("end_time");
-                String imageUrl = object.getString("image_link");
-                String captionRegionalLanguage = object.getString("caption_regional_language");
-                String productLink = object.getString("product_link");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void startAds() {
-        handler.postDelayed(adsRunnable, 1000);
-    }
-
-    private void updateAds(long currentPosition) {
+    public void updateAds(long currentPosition) {
         try {
             currentPosition /= 1000;
             if (ad_data == null)
@@ -201,23 +139,32 @@ public class MaxTap extends AppCompatActivity {
 
             for (int i = 0; i < ad_data.length(); i++) {
                 JSONObject data = ad_data.getJSONObject(i);
-                int startTime = data.getInt("start_time");
-                int endTime = data.getInt("end_time");
+                int startTime = data.getInt(Config.AdParms.START_TIME);
+                int endTime = data.getInt(Config.AdParms.END_TIME);
+                String imageUrl = data.getString(Config.AdParms.IMAGE_LINK);
+//                ImageCache.getInstance().retrieveBitmapFromCache('');
 
+                if(startTime - currentPosition <= 15 && startTime - currentPosition >=0){
+
+                    ImageCache.getInstance().cache(imageUrl);
+                }
                 if (currentPosition >= startTime && currentPosition <= endTime) {
+
                     ad_container.setVisibility(View.VISIBLE);
-                    String imageLink = data.getString("image_link");
-                    String msg = data.getString("caption_regional_language");
-                    String redirect_link = data.getString("redirect_link");
+                    String imageLink = data.getString(Config.AdParms.IMAGE_LINK);
+                    String msg = data.getString(Config.AdParms.CATION_REGIONAL_LANGUAGE);
+                    String redirect_link = data.getString(Config.AdParms.REDIRECT_LINK);
                     Bitmap bitmap = ImageCache.getInstance().retrieveBitmapFromCache(imageLink);
-                    imageView.setImageBitmap(bitmap);
-                    textView.setText(msg);
-                    ad_container.setOnClickListener(v -> {
-                        Uri uri = Uri.parse(redirect_link);
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        context.startActivity(intent);
-                    });
-                    visible = true;
+                    if(bitmap!=null){
+                        imageView.setImageBitmap(bitmap);
+                        textView.setText(msg);
+                        ad_container.setOnClickListener(v -> {
+                            Uri uri = Uri.parse(redirect_link);
+                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                            context.startActivity(intent);
+                        });
+                        visible = true;
+                    }
                     break;
                 }
             }
@@ -225,7 +172,7 @@ public class MaxTap extends AppCompatActivity {
             if (!visible)
                 ad_container.setVisibility(View.GONE);
         } catch (Exception e) {
-            Log.e("error", e.toString());
+            e.printStackTrace();
         }
 
     }

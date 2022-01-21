@@ -1,4 +1,4 @@
-package com.amrit.practice.maxtap.utils;
+package com.maxtap.utils;
 
 import android.util.Log;
 
