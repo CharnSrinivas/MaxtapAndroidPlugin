@@ -1,8 +1,13 @@
 package com.maxtap;
 
+import android.graphics.Color;
+
 public class Config {
 
     public static String CloudBucketUrl = "https://storage.googleapis.com/maxtap-adserver-dev.appspot.com/";
+    public static int AdImagePrecacheingTime = 15;
+    public static String AdTextColor ="#ffffff";
+    public static int AdBgColor = Color.argb(80, 0, 0, 0);
 
     static  class AdParms{
         public  static String  START_TIME ="start_time";

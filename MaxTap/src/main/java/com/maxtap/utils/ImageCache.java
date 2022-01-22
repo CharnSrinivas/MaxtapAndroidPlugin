@@ -44,8 +44,6 @@ public class ImageCache {
                     }
                     Bitmap image = BitmapFactory.decodeStream(is);
                         ImageCache.getInstance().getLru().put(url, image);
-                        Log.i("my-tag","Caching -> "+url);
-
                 }).start();
 
             } catch (Exception e) {
