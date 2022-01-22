@@ -1,18 +1,13 @@
 package com.example.maxtap_sdk;
-import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.os.Handler;
 
 import com.brightcove.player.model.DeliveryType;
 import com.brightcove.player.model.Video;
 import com.brightcove.player.view.BrightcovePlayer;
-import com.brightcove.player.view.BrightcoveVideoView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.maxtap.MaxTap;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.ui.PlayerView;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -49,13 +44,11 @@ public class MainActivity extends BrightcovePlayer {
 
         // Obtain the FirebaseAnalytics instance.
 
-
-
 //        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 //        Bundle bundle = new Bundle();
 //        bundle.putString("test_data","Just seen");
 //        mFirebaseAnalytics.logEvent("android_test_event", bundle);
-
+//
 //
 //
 //

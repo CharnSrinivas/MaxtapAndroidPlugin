@@ -85,7 +85,6 @@ public class MaxTap extends AppCompatActivity {
     private void initializeComponent() {
         adImage = new ImageView(context);
 
-
         adText = new TextView(context);
         adText.setTextSize(14);
         adText.setTextColor(Color.parseColor(Config.AdTextColor));
@@ -99,7 +98,6 @@ public class MaxTap extends AppCompatActivity {
         ad_container.addView(adText);
         ad_container.setVisibility(View.GONE);
 
-
         // Ad container layout
         LayoutParams ad_container_parms = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -109,13 +107,13 @@ public class MaxTap extends AppCompatActivity {
         if (this.screen_height > this.screen_width) {
             // Portrait config
             img_width = this.screen_height * 8 / 100;
-            adText.setMaxWidth(3 * img_width);
-            ad_container_parms.bottomMargin = this.screen_width * 10 / 100;
+            ad_container_parms.bottomMargin = this.screen_height * 10 / 100;
+            adText.setMaxWidth((int)(2.5 * img_width));
         } else {
             // Landscape config
             img_width = this.screen_width * 10 / 100;
-            adText.setMaxWidth(2 * img_width);
-            ad_container_parms.bottomMargin = this.screen_height * 10 / 100;
+            ad_container_parms.bottomMargin = this.screen_height * 12 / 100;
+            adText.setMaxWidth((2 * img_width));
         }
 
         // Image layout
@@ -129,6 +127,7 @@ public class MaxTap extends AppCompatActivity {
         textParams.setMargins(0, 0, img_width, 0);
         textParams.gravity = Gravity.CENTER_VERTICAL;
         adText.setLayoutParams(textParams);
+
 
         ad_container_parms.rightMargin = this.screen_width / 150;
         ((ViewGroup) video_player).addView(ad_container, ad_container_parms);
