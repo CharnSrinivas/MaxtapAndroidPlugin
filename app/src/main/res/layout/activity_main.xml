@@ -3,40 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ott_player"
+    <Button
+        android:id="@+id/start_btn"
+        android:layout_width="213dp"
+        android:layout_height="64dp"
+        android:background="@drawable/round_corner"
+        android:letterSpacing="0.1"
+
+        android:text="Start"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-<!--    <com.google.android.exoplayer2.ui.PlayerView-->
-<!--        android:id="@+id/video_player"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        android:background="@color/colorPrimary"-->
-        >
-
-        <com.brightcove.player.view.BrightcoveVideoView
-            android:id="@+id/video_player"
-            android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:layout_gravity="center_horizontal|top"
-            tools:ignore="MissingConstraints" >
-
-
-        </com.brightcove.player.view.BrightcoveVideoView>
-
-
-<!--    </com.google.android.exoplayer2.ui.PlayerView>-->
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499" />
 </androidx.constraintlayout.widget.ConstraintLayout>
