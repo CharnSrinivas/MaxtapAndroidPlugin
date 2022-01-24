@@ -19,9 +19,10 @@ public class MainActivity extends AppCompatActivity {
         });
 //         Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics.setUserId("123456");
         Bundle bundle = new Bundle();
-        bundle.putString("test_data","Just seen");
-        mFirebaseAnalytics.logEvent("android_test_event", bundle);
+        bundle.putString("test_data","hello i am from Amsterdam");
+        mFirebaseAnalytics.logEvent("hitesh_test_event", bundle);
 
     }
 }

@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "784955462498",
-    "project_id": "maxtap-adserver-92e69",
-    "storage_bucket": "maxtap-adserver-92e69.appspot.com"
+    "project_number": "449617130912",
+    "project_id": "maxtap-adserver",
+    "storage_bucket": "maxtap-adserver.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:784955462498:android:b6635d9e544fd4cc05923b",
+        "mobilesdk_app_id": "1:449617130912:android:20976c3386c823f9a4a0c5",
         "android_client_info": {
           "package_name": "com.example.maxtap_sdk"
         }
       },
       "oauth_client": [
         {
-          "client_id": "784955462498-6jhuet3nnfjqfak838akjoncmmthv0o9.apps.googleusercontent.com",
+          "client_id": "449617130912-hfau1btf5ap0cordppf2c8st0jgknl6c.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBzWjawCMnJyYuNcTF6JBhSw9qbejROmtw"
+          "current_key": "AIzaSyBrH7FqyUTJvTvWr_EFlZ7Mb_dPW6V4tKk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "784955462498-6jhuet3nnfjqfak838akjoncmmthv0o9.apps.googleusercontent.com",
+              "client_id": "449617130912-hfau1btf5ap0cordppf2c8st0jgknl6c.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
