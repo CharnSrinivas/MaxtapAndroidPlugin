@@ -40,7 +40,6 @@ public class VideoPlayer extends BrightcovePlayer {
         }
         brightcoveVideoView.add(video);
         brightcoveVideoView.start();
-
 //
 //
 //
