@@ -44,12 +44,9 @@ public class VideoPlayer extends BrightcovePlayer {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setUserId("123456");
         Bundle bundle = new Bundle();
-        bundle.putString("test_data","hello i am from Amsterdam");
-        mFirebaseAnalytics.logEvent("hitesh_test_event", bundle);
+        bundle.putString("advertiser","myntra");
+        mFirebaseAnalytics.logEvent("charan_test_event", bundle);
 
-//
-//
-//
 //        exoPlayer = new ExoPlayer.Builder(this).build();
 //        PlayerView playerView = findViewById(R.id.video_player);
 //        //Binding the player with the view that is there in our xml.
