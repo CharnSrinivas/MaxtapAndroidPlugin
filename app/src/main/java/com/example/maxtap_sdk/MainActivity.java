@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         findViewById(R.id.start_btn).setOnClickListener((start_button)->{
             startActivity(new Intent(MainActivity.this,VideoPlayer.class));
 
