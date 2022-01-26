@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    FirebaseAnalytics mFirebaseAnalytics;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -15,6 +18,12 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.start_btn).setOnClickListener((start_button)->{
             startActivity(new Intent(MainActivity.this,VideoPlayer.class));
+
         });
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle bundle = new Bundle();
+        bundle.putString("advertiser","myntra");
+        mFirebaseAnalytics.logEvent("charan_test_event", bundle);
+
     }
 }
