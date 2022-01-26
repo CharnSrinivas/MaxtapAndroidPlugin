@@ -9,15 +9,12 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-//import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static GoogleAnalytics sAnalytics;
-    private static Tracker sTracker;
 
-    //    FirebaseAnalytics mFirebaseAnalytics;
-    Tracker mTracker;
+    FirebaseAnalytics mFirebaseAnalytics;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,8 +22,12 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.start_btn).setOnClickListener((start_button)->{
             startActivity(new Intent(MainActivity.this,VideoPlayer.class));
+
         });
-        sAnalytics = GoogleAnalytics.getInstance(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle bundle = new Bundle();
+        bundle.putString("advertiser","myntra");
+        mFirebaseAnalytics.logEvent("charan_test_event", bundle);
 
         mTracker = getDefaultTracker();
         mTracker.send(new HitBuilders.EventBuilder()

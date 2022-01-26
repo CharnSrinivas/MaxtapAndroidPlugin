@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
 
 
 public class VideoPlayer extends BrightcovePlayer {
-
+    FirebaseAnalytics mFirebaseAnalytics;
     MaxTap maxTapAds;
 //    ExoPlayer exoPlayer;
     Handler maxtapAdHandler = new Handler();
@@ -40,6 +40,13 @@ public class VideoPlayer extends BrightcovePlayer {
         }
         brightcoveVideoView.add(video);
         brightcoveVideoView.start();
+        //         Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics.setUserId("123456");
+        Bundle bundle = new Bundle();
+        bundle.putString("test_data","hello i am from Amsterdam");
+        mFirebaseAnalytics.logEvent("hitesh_test_event", bundle);
+
 //
 //
 //
