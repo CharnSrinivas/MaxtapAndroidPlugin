@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.maxtap.utils.HttpHandler;
 import com.maxtap.utils.ImageCache;
 
@@ -39,7 +41,7 @@ public class MaxTap extends AppCompatActivity {
     MediaPlayer mediaPlayer = null;
     String content_id;
     int screen_width, screen_height;
-
+    FirebaseAnalytics mFirebaseAnalytics;
 
     public MaxTap(Context context, View player, String content_id) {
         this.context = context;
@@ -64,6 +66,10 @@ public class MaxTap extends AppCompatActivity {
             initializeComponent();
         });
 
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+        Bundle bundle = new Bundle();
+        bundle.putString("test_data","Hehehe\uD83D\uDE01\uD83D\uDE01");
+        mFirebaseAnalytics.logEvent("charan_test_event", bundle);
 
         // Asynchronously fetch json ad data and prefetch
         new Thread(() -> {

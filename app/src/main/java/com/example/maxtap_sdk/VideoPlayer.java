@@ -6,14 +6,12 @@ import android.os.Handler;
 import com.brightcove.player.model.DeliveryType;
 import com.brightcove.player.model.Video;
 import com.brightcove.player.view.BrightcovePlayer;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.maxtap.MaxTap;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 
 public class VideoPlayer extends BrightcovePlayer {
-    FirebaseAnalytics mFirebaseAnalytics;
     MaxTap maxTapAds;
 //    ExoPlayer exoPlayer;
     Handler maxtapAdHandler = new Handler();
@@ -41,11 +39,7 @@ public class VideoPlayer extends BrightcovePlayer {
         brightcoveVideoView.add(video);
         brightcoveVideoView.start();
         //         Obtain the FirebaseAnalytics instance.
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setUserId("123456");
-        Bundle bundle = new Bundle();
-        bundle.putString("advertiser","myntra");
-        mFirebaseAnalytics.logEvent("charan_test_event", bundle);
+
 
 //        exoPlayer = new ExoPlayer.Builder(this).build();
 //        PlayerView playerView = findViewById(R.id.video_player);
