@@ -7,19 +7,20 @@ import com.brightcove.player.model.DeliveryType;
 import com.brightcove.player.model.Video;
 import com.brightcove.player.view.BrightcovePlayer;
 import com.maxtap.MaxTap;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
 
 public class VideoPlayer extends BrightcovePlayer {
     MaxTap maxTapAds;
-//    ExoPlayer exoPlayer;
+    //    ExoPlayer exoPlayer;
     Handler maxtapAdHandler = new Handler();
     Runnable maxtapAdRunnable = new Runnable() {
         @Override
         public void run() {
             maxTapAds.updateAds(brightcoveVideoView.getCurrentPosition());
-            maxtapAdHandler.postDelayed(maxtapAdRunnable,1000);
+            maxtapAdHandler.postDelayed(maxtapAdRunnable, 500);
         }
     };
 
@@ -27,7 +28,7 @@ public class VideoPlayer extends BrightcovePlayer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_player);
-        brightcoveVideoView =  findViewById(R.id.video_player);
+        brightcoveVideoView = findViewById(R.id.video_player);
         Video video = Video.createVideo("http://sdks.support.brightcove.com/assets/videos/hls/greatblueheron/greatblueheron.m3u8",
                 DeliveryType.HLS);
         try {
@@ -38,8 +39,6 @@ public class VideoPlayer extends BrightcovePlayer {
         }
         brightcoveVideoView.add(video);
         brightcoveVideoView.start();
-        //         Obtain the FirebaseAnalytics instance.
-
 
 //        exoPlayer = new ExoPlayer.Builder(this).build();
 //        PlayerView playerView = findViewById(R.id.video_player);
@@ -54,9 +53,9 @@ public class VideoPlayer extends BrightcovePlayer {
 //        //playing the video.
 //        exoPlayer.play();
 
-        maxTapAds =  new MaxTap(this,  brightcoveVideoView, "test_data");
+        maxTapAds = new MaxTap(this, brightcoveVideoView, "test_data");
         maxTapAds.init();
-        maxtapAdHandler.postDelayed(maxtapAdRunnable,1000);
+        maxtapAdHandler.postDelayed(maxtapAdRunnable, 500);
     }
 
 }

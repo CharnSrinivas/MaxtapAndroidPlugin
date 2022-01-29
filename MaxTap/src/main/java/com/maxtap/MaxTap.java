@@ -5,11 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +17,17 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.firebase.analytics.FirebaseAnalytics;
+import com.maxtap.Models.AdData;
+import com.maxtap.utils.GaAnalyticsHelper;
 import com.maxtap.utils.HttpHandler;
 import com.maxtap.utils.ImageCache;
+import com.maxtap.utils.utils;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 
 public class MaxTap extends AppCompatActivity {
 
@@ -36,24 +36,18 @@ public class MaxTap extends AppCompatActivity {
     TextView adText;
     FrameLayout ad_container;
     View video_player;
-    JSONArray ad_data = null;
-    ExoPlayer exoPlayer = null;
-    MediaPlayer mediaPlayer = null;
+    ArrayList<AdData> ads_data = new ArrayList<>();
+    JSONArray ad_data_json = new JSONArray();
     String content_id;
     int screen_width, screen_height;
-    FirebaseAnalytics mFirebaseAnalytics;
+    int current_ad_index = -1;
+    GaAnalyticsHelper analyticsHelper;
 
     public MaxTap(Context context, View player, String content_id) {
         this.context = context;
         this.video_player = player;
         this.content_id = content_id;
-    }
-
-    public MaxTap(Context context, View player, MediaPlayer mediaPlayer, String content_id) {
-        this.context = context;
-        this.video_player = player;
-        this.mediaPlayer = mediaPlayer;
-        this.content_id = content_id;
+        this.analyticsHelper = new GaAnalyticsHelper(context);
     }
 
     public void init() {
@@ -65,12 +59,6 @@ public class MaxTap extends AppCompatActivity {
             screen_width = displayMetrics.widthPixels;
             initializeComponent();
         });
-
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
-        Bundle bundle = new Bundle();
-        bundle.putString("test_data","Hehehe\uD83D\uDE01\uD83D\uDE01");
-        mFirebaseAnalytics.logEvent("charan_test_event", bundle);
-
         // Asynchronously fetch json ad data and prefetch
         new Thread(() -> {
             String url;
@@ -79,9 +67,19 @@ public class MaxTap extends AppCompatActivity {
             } else {
                 url = Config.CloudBucketUrl + content_id + ".json";
             }
-            String data = new HttpHandler().makeServiceCall(url);
+            String response_data = new HttpHandler().makeServiceCall(url);
             try {
-                ad_data = new JSONArray(data);
+                ad_data_json = new JSONArray(response_data);
+                for (int i = 0; i < ad_data_json.length(); i++) {
+                    AdData ad = new AdData();
+                    JSONObject json_ad = ad_data_json.getJSONObject(i);
+                    ad.startTime = json_ad.getInt(Config.AdParms.START_TIME);
+                    ad.end_time = json_ad.getInt(Config.AdParms.END_TIME);
+                    ad.caption_regional_language = json_ad.getString(Config.AdParms.CATION_REGIONAL_LANGUAGE);
+                    ad.imageLink = json_ad.getString(Config.AdParms.IMAGE_LINK);
+                    ad.redirect_link = json_ad.getString(Config.AdParms.REDIRECT_LINK);
+                    ads_data.add(ad);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -89,8 +87,8 @@ public class MaxTap extends AppCompatActivity {
     }
 
     private void initializeComponent() {
-        adImage = new ImageView(context);
 
+        adImage = new ImageView(context);
         adText = new TextView(context);
         adText.setTextSize(14);
         adText.setTextColor(Color.parseColor(Config.AdTextColor));
@@ -99,22 +97,18 @@ public class MaxTap extends AppCompatActivity {
         // Initializing frame layout
         ad_container = new FrameLayout(context);
         ad_container.setBackgroundColor(Config.AdBgColor);
-        // Adding views to FrameLayout
-        ad_container.addView(adImage);
-        ad_container.addView(adText);
+
         ad_container.setVisibility(View.GONE);
 
         // Ad container layout
         LayoutParams ad_container_parms = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        ad_container_parms.gravity = Gravity.RIGHT | Gravity.BOTTOM;
 
         int img_width;
         if (this.screen_height > this.screen_width) {
             // Portrait config
             img_width = this.screen_height * 8 / 100;
             ad_container_parms.bottomMargin = this.screen_height * 10 / 100;
-            adText.setMaxWidth((int)(2.5 * img_width));
+            adText.setMaxWidth((int) (2.5 * img_width));
         } else {
             // Landscape config
             img_width = this.screen_width * 10 / 100;
@@ -135,53 +129,64 @@ public class MaxTap extends AppCompatActivity {
         adText.setLayoutParams(textParams);
 
 
+        ad_container_parms.gravity = Gravity.RIGHT | Gravity.BOTTOM;
         ad_container_parms.rightMargin = this.screen_width / 150;
+
+        // Adding views to FrameLayout
+        ad_container.addView(adImage);
+        ad_container.addView(adText);
+
         ((ViewGroup) video_player).addView(ad_container, ad_container_parms);
-
     }
-
 
     public void updateAds(long currentPosition) {
         try {
             currentPosition /= 1000;
-            if (ad_data == null)
+            if (ads_data == null)
                 return;
-
             boolean visible = false;
+            for (int index = 0; index < ads_data.size(); index++) {
+                AdData ad_data = ads_data.get(index);
+                int startTime = ad_data.startTime;
+                int endTime = ad_data.end_time;
+                String imageUrl = ad_data.imageLink;
+                String ad_text = ad_data.caption_regional_language;
+                String redirect_link = ad_data.redirect_link;
+                boolean is_in_range = (currentPosition >= startTime && currentPosition <= endTime);
+                boolean can_prefetch = (startTime - currentPosition <= Config.AdImagePrecacheingTime && startTime - currentPosition >= 0);
 
-            for (int i = 0; i < ad_data.length(); i++) {
-                JSONObject data = ad_data.getJSONObject(i);
-                int startTime = data.getInt(Config.AdParms.START_TIME);
-                int endTime = data.getInt(Config.AdParms.END_TIME);
-                String imageUrl = data.getString(Config.AdParms.IMAGE_LINK);
-
-                if (startTime - currentPosition <= Config.AdImagePrecacheingTime && startTime - currentPosition >= 0) {
+                if (can_prefetch) {
                     ImageCache.getInstance().cache(imageUrl);
                 }
-
-                if (currentPosition >= startTime && currentPosition <= endTime) {
-
-                    ad_container.setVisibility(View.VISIBLE);
-                    String imageLink = data.getString(Config.AdParms.IMAGE_LINK);
-                    String msg = data.getString(Config.AdParms.CATION_REGIONAL_LANGUAGE);
-                    String redirect_link = data.getString(Config.AdParms.REDIRECT_LINK);
-                    Bitmap bitmap = ImageCache.getInstance().retrieveBitmapFromCache(imageLink);
-                    if (bitmap == null) break;
-                    adImage.setImageBitmap(bitmap);
-                    adText.setText(msg);
-                    ad_container.setOnClickListener(v -> {
-                        Uri uri = Uri.parse(redirect_link);
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        context.startActivity(intent);
-                    });
-
+                if (is_in_range) {
                     visible = true;
-                    break;
+                    if (ad_container.getVisibility() == View.GONE && this.current_ad_index != index) {
+                        this.current_ad_index = index;
+                        Bitmap bitmap = ImageCache.getInstance().retrieveBitmapFromCache(imageUrl);
+                        if (bitmap == null) break;
+                        // Set visibility iff we find cached image data
+                        ad_container.setVisibility(View.VISIBLE);
+                        adImage.setImageBitmap(bitmap);
+                        adText.setText(ad_text);
+                        int finalIndex = index;
+                        ad_container.setOnClickListener((View ad) -> {
+                            ad_data.no_of_clicks++;
+                            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(redirect_link)));
+                            try {
+                                analyticsHelper.logClickEvent(utils.createGAClickProperties(ad_data_json.getJSONObject(finalIndex),ad_data));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                        ad_data.no_of_views++;
+                        analyticsHelper.logImpressionEvent(utils.createGAImpressionProperties(ad_data_json.getJSONObject(index), ad_data));
+                    }
                 }
             }
-
-            if (!visible)
+            if (!visible) {
                 ad_container.setVisibility(View.GONE);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
