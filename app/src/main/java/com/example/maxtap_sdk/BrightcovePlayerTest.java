@@ -12,7 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 
-public class VideoPlayer extends BrightcovePlayer {
+public class BrightcovePlayerTest extends BrightcovePlayer {
     MaxTap maxTapAds;
     //    ExoPlayer exoPlayer;
     Handler maxtapAdHandler = new Handler();
@@ -27,7 +27,7 @@ public class VideoPlayer extends BrightcovePlayer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.video_player);
+        setContentView(R.layout.brightcove_player);
         brightcoveVideoView = findViewById(R.id.video_player);
         Video video = Video.createVideo("http://sdks.support.brightcove.com/assets/videos/hls/greatblueheron/greatblueheron.m3u8",
                 DeliveryType.HLS);

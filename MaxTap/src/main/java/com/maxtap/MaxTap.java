@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,10 +73,15 @@ public class MaxTap extends AppCompatActivity {
                 ad_data_json = new JSONArray(response_data);
                 for (int i = 0; i < ad_data_json.length(); i++) {
                     AdData ad = new AdData();
+                    boolean is_valid_data = true;
                     JSONObject json_ad = ad_data_json.getJSONObject(i);
+                    for (String parm:Config.AdParms.REQUIRED) {
+                        if(!json_ad.has(parm)){ Log.i("maxtap","Doesn't have property "+parm); is_valid_data=false;break;}
+                    }
+                    if(!is_valid_data){continue;}
                     ad.startTime = json_ad.getInt(Config.AdParms.START_TIME);
                     ad.end_time = json_ad.getInt(Config.AdParms.END_TIME);
-                    ad.caption_regional_language = json_ad.getString(Config.AdParms.CATION_REGIONAL_LANGUAGE);
+                    ad.caption = json_ad.getString(Config.AdParms.CATION_REGIONAL_LANGUAGE);
                     ad.imageLink = json_ad.getString(Config.AdParms.IMAGE_LINK);
                     ad.redirect_link = json_ad.getString(Config.AdParms.REDIRECT_LINK);
                     ads_data.add(ad);
@@ -130,7 +136,7 @@ public class MaxTap extends AppCompatActivity {
 
 
         ad_container_parms.gravity = Gravity.RIGHT | Gravity.BOTTOM;
-        ad_container_parms.rightMargin = this.screen_width / 150;
+        ad_container_parms.rightMargin = this.screen_width / 200;
 
         // Adding views to FrameLayout
         ad_container.addView(adImage);
@@ -149,20 +155,18 @@ public class MaxTap extends AppCompatActivity {
                 AdData ad_data = ads_data.get(index);
                 int startTime = ad_data.startTime;
                 int endTime = ad_data.end_time;
-                String imageUrl = ad_data.imageLink;
-                String ad_text = ad_data.caption_regional_language;
+                String ad_text = ad_data.caption;
                 String redirect_link = ad_data.redirect_link;
                 boolean is_in_range = (currentPosition >= startTime && currentPosition <= endTime);
-                boolean can_prefetch = (startTime - currentPosition <= Config.AdImagePrecacheingTime && startTime - currentPosition >= 0);
-
+                boolean can_prefetch = (startTime - currentPosition <= Config.AdImagePrecacheingTime && startTime - currentPosition >= 0) && !ad_data.image_loaded && !ad_data.image_loading;
                 if (can_prefetch) {
-                    ImageCache.getInstance().cache(imageUrl);
+                    ImageCache.getInstance().cache(ad_data);
                 }
                 if (is_in_range) {
                     visible = true;
-                    if (ad_container.getVisibility() == View.GONE && this.current_ad_index != index) {
+                    if (ad_container.getVisibility() == View.GONE && this.current_ad_index != index && ad_data.image_loaded) {
                         this.current_ad_index = index;
-                        Bitmap bitmap = ImageCache.getInstance().retrieveBitmapFromCache(imageUrl);
+                        Bitmap bitmap = ImageCache.getInstance().retrieveBitmapFromCache(ad_data.imageLink);
                         if (bitmap == null) break;
                         // Set visibility iff we find cached image data
                         ad_container.setVisibility(View.VISIBLE);
@@ -173,7 +177,7 @@ public class MaxTap extends AppCompatActivity {
                             ad_data.no_of_clicks++;
                             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(redirect_link)));
                             try {
-                                analyticsHelper.logClickEvent(utils.createGAClickProperties(ad_data_json.getJSONObject(finalIndex),ad_data));
+                                analyticsHelper.logClickEvent(utils.createGAClickProperties(ad_data_json.getJSONObject(finalIndex), ad_data));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

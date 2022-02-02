@@ -6,9 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.maxtap.Models.AdData;
-import com.maxtap.Models.Click;
-import com.maxtap.Models.Impression;
+import com.maxtap.Models.ClickEvent;
+import com.maxtap.Models.ImpressionEvent;
 
 public class GaAnalyticsHelper {
     Context context;
@@ -18,7 +17,7 @@ public class GaAnalyticsHelper {
         analytics = FirebaseAnalytics.getInstance(context);
     }
 
-    public void logImpressionEvent(@NonNull Impression impressionData) {
+    public void logImpressionEvent(@NonNull ImpressionEvent impressionData) {
         Bundle impressionProperties = new Bundle();
 
         impressionProperties.putString("client_id",impressionData.client_id);
@@ -33,7 +32,7 @@ public class GaAnalyticsHelper {
         impressionProperties.putString("content_language",impressionData.content_language);
         impressionProperties.putString("advertiser",impressionData.advertiser);
         impressionProperties.putString("ad_id",impressionData.ad_id);
-        impressionProperties.putString("caption_regional_language",impressionData.caption_regional_language);
+        impressionProperties.putString("caption_regional_language",impressionData.caption);
         impressionProperties.putString("caption_english",impressionData.caption_english);
         impressionProperties.putInt("start_time",impressionData.start_time);
         impressionProperties.putInt("end_time",impressionData.end_time);
@@ -51,7 +50,7 @@ public class GaAnalyticsHelper {
         analytics.logEvent("impression",impressionProperties);
     }
 
-    public void logClickEvent(Click clickData){
+    public void logClickEvent(ClickEvent clickData){
 
         Bundle impressionProperties = new Bundle();
 
@@ -67,7 +66,7 @@ public class GaAnalyticsHelper {
         impressionProperties.putString("content_language",clickData.content_language);
         impressionProperties.putString("advertiser",clickData.advertiser);
         impressionProperties.putString("ad_id",clickData.ad_id);
-        impressionProperties.putString("caption_regional_language",clickData.caption_regional_language);
+        impressionProperties.putString("caption",clickData.caption);
         impressionProperties.putString("caption_english",clickData.caption_english);
         impressionProperties.putInt("start_time",clickData.start_time);
         impressionProperties.putInt("end_time",clickData.end_time);

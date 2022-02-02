@@ -15,6 +15,7 @@ public final class Config {
         public final static String END_TIME = "end_time";
         public final static String IMAGE_LINK = "image_link";
         public final static String CATION_REGIONAL_LANGUAGE = "caption_regional_language";
+        public final static String CAPTION="caption";
         public final static String REDIRECT_LINK = "redirect_link";
         public final static String CLIENT_ID = "client_id";
         public final static String CLIENT_NAME = "client_name";
@@ -39,5 +40,7 @@ public final class Config {
         public final static String AD_VIEWED_COUNT = "ad_viewed_count";
         public final static String AD_ID = "ad_id";
         public final static String PRODUCT_IMAGE_LINK = "product_image_link";
+
+        public final  static String[] REQUIRED ={START_TIME,END_TIME,IMAGE_LINK,CAPTION};
     }
 }

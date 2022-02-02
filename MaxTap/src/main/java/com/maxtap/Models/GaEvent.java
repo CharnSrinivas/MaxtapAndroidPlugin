@@ -1,6 +1,7 @@
 package com.maxtap.Models;
 
-public class Click {
+public class GaEvent {
+
     public String client_id = "null";
     public String client_name = "null";
     public String content_id = "null";
@@ -17,6 +18,7 @@ public class Click {
 
     //ad
     public String ad_id = "null";
+    public String caption = "null";
     public String caption_regional_language = "null";
     public String caption_english = "null";
     public int start_time = 0;
@@ -31,6 +33,4 @@ public class Click {
     public String product_link = "null";
     public String product_image_link = "null";
     public String redirect_link = "null";
-    //user
-    public int times_clicked = 0;
 }

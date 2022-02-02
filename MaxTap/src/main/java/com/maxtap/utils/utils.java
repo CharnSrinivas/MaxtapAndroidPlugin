@@ -2,16 +2,16 @@ package com.maxtap.utils;
 
 import com.maxtap.Config;
 import com.maxtap.Models.AdData;
-import com.maxtap.Models.Click;
-import com.maxtap.Models.Impression;
+import com.maxtap.Models.ClickEvent;
+import com.maxtap.Models.ImpressionEvent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class utils {
 
-    public static Impression createGAImpressionProperties(JSONObject json_ad_data, AdData ad_data) throws JSONException {
-        Impression impressionData = new Impression();
+    public static ImpressionEvent createGAImpressionProperties(JSONObject json_ad_data, AdData ad_data) throws JSONException {
+        ImpressionEvent impressionData = new ImpressionEvent();
         impressionData.client_id = json_ad_data.has(Config.AdParms.CLIENT_ID) ? json_ad_data.getString(Config.AdParms.CLIENT_ID) : "null";
         impressionData.client_name = json_ad_data.has(Config.AdParms.CLIENT_NAME) ? json_ad_data.getString(Config.AdParms.CLIENT_NAME) : "null";
         impressionData.content_id = json_ad_data.has(Config.AdParms.CONTENT_ID) ? json_ad_data.getString(Config.AdParms.CONTENT_ID) : "null";
@@ -24,6 +24,7 @@ public class utils {
         impressionData.content_language = json_ad_data.has(Config.AdParms.CONTENT_LANGUAGE) ? json_ad_data.getString(Config.AdParms.CONTENT_LANGUAGE) : "null";
         impressionData.advertiser = json_ad_data.has(Config.AdParms.ADVERTISER) ? json_ad_data.getString(Config.AdParms.ADVERTISER) : "null";
         impressionData.ad_id = json_ad_data.has(Config.AdParms.AD_ID) ? json_ad_data.getString(Config.AdParms.AD_ID) : "null";
+        impressionData.caption = json_ad_data.has(Config.AdParms.CAPTION) ? json_ad_data.getString(Config.AdParms.CAPTION):"null";
 //        impressionData.caption_regional_language =json_ad_data.has(Config.AdParms.CAPTION_REGIONAL_LANGUAGE) ? json_ad_data.getString(Config.AdParms.CAPTION_REGIONAL_LANGUAGE):"null";
 //        impressionData.caption_english =json_ad_data.has(Config.AdParms.CAPTION_ENGLISH) ? json_ad_data.getString(Config.AdParms.CAPTION_ENGLISH):"null";
         impressionData.start_time = json_ad_data.has(Config.AdParms.START_TIME) ? json_ad_data.getInt(Config.AdParms.START_TIME) : 0;
@@ -37,13 +38,15 @@ public class utils {
         impressionData.product_link = json_ad_data.has(Config.AdParms.PRODUCT_LINK) ? json_ad_data.getString(Config.AdParms.PRODUCT_LINK) : "null";
         impressionData.product_image_link = json_ad_data.has(Config.AdParms.PRODUCT_IMAGE_LINK) ? json_ad_data.getString(Config.AdParms.PRODUCT_IMAGE_LINK) : "null";
         impressionData.redirect_link = json_ad_data.has(Config.AdParms.REDIRECT_LINK) ? json_ad_data.getString(Config.AdParms.REDIRECT_LINK) : "null";
+
+
         impressionData.ad_viewed_count = ad_data.no_of_views;
 
         return impressionData;
     }
 
-    public static Click createGAClickProperties(JSONObject json_ad_data, AdData ad_data) throws JSONException {
-        Click clickProperties = new Click();
+    public static ClickEvent createGAClickProperties(JSONObject json_ad_data, AdData ad_data) throws JSONException {
+        ClickEvent clickProperties = new ClickEvent();
         clickProperties.client_id = json_ad_data.has(Config.AdParms.CLIENT_ID) ? json_ad_data.getString(Config.AdParms.CLIENT_ID) : "null";
         clickProperties.client_name = json_ad_data.has(Config.AdParms.CLIENT_NAME) ? json_ad_data.getString(Config.AdParms.CLIENT_NAME) : "null";
         clickProperties.content_id = json_ad_data.has(Config.AdParms.CONTENT_ID) ? json_ad_data.getString(Config.AdParms.CONTENT_ID) : "null";
@@ -56,6 +59,7 @@ public class utils {
         clickProperties.content_language = json_ad_data.has(Config.AdParms.CONTENT_LANGUAGE) ? json_ad_data.getString(Config.AdParms.CONTENT_LANGUAGE) : "null";
         clickProperties.advertiser = json_ad_data.has(Config.AdParms.ADVERTISER) ? json_ad_data.getString(Config.AdParms.ADVERTISER) : "null";
         clickProperties.ad_id = json_ad_data.has(Config.AdParms.AD_ID) ? json_ad_data.getString(Config.AdParms.AD_ID) : "null";
+        clickProperties.caption = json_ad_data.has(Config.AdParms.CAPTION) ? json_ad_data.getString(Config.AdParms.CAPTION):"null";
 //        impressionData.caption_regional_language =json_ad_data.has(Config.AdParms.CAPTION_REGIONAL_LANGUAGE) ? json_ad_data.getString(Config.AdParms.CAPTION_REGIONAL_LANGUAGE):"null";
 //        impressionData.caption_english =json_ad_data.has(Config.AdParms.CAPTION_ENGLISH) ? json_ad_data.getString(Config.AdParms.CAPTION_ENGLISH):"null";
         clickProperties.start_time = json_ad_data.has(Config.AdParms.START_TIME) ? json_ad_data.getInt(Config.AdParms.START_TIME) : 0;

@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".VideoPlayer"></activity>
+        <activity android:name=".BrightcovePlayerTest"></activity>
+        <activity android:name=".ExoplayerTest"></activity>
     </application>
 
 </manifest>
