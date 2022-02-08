@@ -12,7 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 
-public class BrightcovePlayerTest extends BrightcovePlayer {
+public class BrightcovePlayerIntegration extends BrightcovePlayer {
     MaxTap maxTapAds;
     //    ExoPlayer exoPlayer;
     Handler maxtapAdHandler = new Handler();
@@ -29,8 +29,8 @@ public class BrightcovePlayerTest extends BrightcovePlayer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.brightcove_player);
         brightcoveVideoView = findViewById(R.id.video_player);
-        Video video = Video.createVideo("http://sdks.support.brightcove.com/assets/videos/hls/greatblueheron/greatblueheron.m3u8",
-                DeliveryType.HLS);
+        Video video = Video.createVideo("android.resource://"+getPackageName()+"/"+R.raw.sample_video, DeliveryType.MP4);
+
         try {
             java.net.URI myposterImage = new URI("https://sdks.support.brightcove.com/assets/images/general/Great-Blue-Heron.png");
             video.getProperties().put(Video.Fields.STILL_IMAGE_URI, myposterImage);
@@ -39,20 +39,8 @@ public class BrightcovePlayerTest extends BrightcovePlayer {
         }
         brightcoveVideoView.add(video);
         brightcoveVideoView.start();
-
-//        exoPlayer = new ExoPlayer.Builder(this).build();
-//        PlayerView playerView = findViewById(R.id.video_player);
-//        //Binding the player with the view that is there in our xml.
-//        playerView.setPlayer(exoPlayer);
-//        //Building the media Item.
-//        MediaItem mediaItem = MediaItem.fromUri("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4");
-//        //Setting the media item that is to be played.
-//        exoPlayer.setMediaItem(mediaItem);
-//        //preparing the player
-//        exoPlayer.prepare();
-//        //playing the video.
-//        exoPlayer.play();
-
+//        brightcoveVideoView.seekTo(15*1000);
+//        this.getBrightcoveVideoView().seekTo(15*1000);
         maxTapAds = new MaxTap(this, brightcoveVideoView, "test_data");
         maxTapAds.init();
         maxtapAdHandler.postDelayed(maxtapAdRunnable, 500);

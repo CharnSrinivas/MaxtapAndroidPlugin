@@ -19,8 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BrightcovePlayerTest"></activity>
-        <activity android:name=".ExoplayerTest"></activity>
+        <activity android:name=".BrightcovePlayerIntegration"></activity>
+        <activity android:name=".ExoplayerIntegration"></activity>
     </application>
 
 </manifest>

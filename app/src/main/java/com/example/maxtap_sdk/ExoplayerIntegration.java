@@ -1,7 +1,9 @@
 package com.example.maxtap_sdk;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,7 +12,7 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.maxtap.MaxTap;
 
-public class ExoplayerTest extends AppCompatActivity {
+public class ExoplayerIntegration extends AppCompatActivity {
     ExoPlayer exoPlayer;
     MaxTap maxTapAds;
 
@@ -34,7 +36,7 @@ public class ExoplayerTest extends AppCompatActivity {
         //Binding the player with the view that is there in our xml.
         playerView.setPlayer(exoPlayer);
         //Building the media Item.
-        MediaItem mediaItem = MediaItem.fromUri("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4");
+        MediaItem mediaItem = MediaItem.fromUri("android.resource://"+getPackageName()+"/"+R.raw.sample_video);
         //Setting the media item that is to be played.
         exoPlayer.setMediaItem(mediaItem);
         //preparing the player
@@ -44,8 +46,24 @@ public class ExoplayerTest extends AppCompatActivity {
         // Initializing
         maxTapAds = new MaxTap(this,playerView,"test_data");
         maxTapAds.init();
-
+//        exoPlayer.seekTo(15* 1000L);
         // Update ads for every one second
         maxtapAdHandler.postDelayed(maxtapAdRunnable, 500);
+    }
+
+    public void seekTo(long time) throws InterruptedException {
+        Log.i("test_log",time+"");
+        exoPlayer.seekTo(time);
+        AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return  null;
+            }
+        }.execute();
     }
 }

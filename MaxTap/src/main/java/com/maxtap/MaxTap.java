@@ -103,7 +103,7 @@ public class MaxTap extends AppCompatActivity {
         // Initializing frame layout
         ad_container = new FrameLayout(context);
         ad_container.setBackgroundColor(Config.AdBgColor);
-
+        ad_container.setId(R.id.maxtap_container_id);
         ad_container.setVisibility(View.GONE);
 
         // Ad container layout
@@ -121,7 +121,6 @@ public class MaxTap extends AppCompatActivity {
             ad_container_parms.bottomMargin = this.screen_height * 12 / 100;
             adText.setMaxWidth((2 * img_width));
         }
-
         // Image layout
         LayoutParams imageParams = new LayoutParams(img_width, img_width);
         imageParams.setMargins(10, 10, 10, 10);
@@ -133,7 +132,6 @@ public class MaxTap extends AppCompatActivity {
         textParams.setMargins(0, 0, img_width, 0);
         textParams.gravity = Gravity.CENTER_VERTICAL;
         adText.setLayoutParams(textParams);
-
 
         ad_container_parms.gravity = Gravity.RIGHT | Gravity.BOTTOM;
         ad_container_parms.rightMargin = this.screen_width / 200;
