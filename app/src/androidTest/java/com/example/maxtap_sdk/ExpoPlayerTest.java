@@ -41,7 +41,7 @@ public class ExpoPlayerTest {
             Log.i("test_log","start");
             for (int ad_time: ad_times) {
                 activity.exoPlayer.seekTo(ad_time*1000L);
-//                onView(withId(R.id.maxtap_container_id)).check(matches(isDisplayed())).perform(click());
+                onView(withId(R.id.maxtap_container_id)).check(matches(isDisplayed())).perform(click());
             }
 
             Log.i("test_log","end");

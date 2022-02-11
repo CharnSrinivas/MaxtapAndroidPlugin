@@ -11,7 +11,7 @@ public class GaEvent {
     public String season = "null";
     public int episode_no = 0;
     public int content_duration = 0;
-    public String content_language = "null";
+//    public String content_language = "null";
 
     //advertiser
     public String advertiser = "null";
@@ -28,9 +28,9 @@ public class GaEvent {
     public String gender = "null";
     public String product_details = "null";
     public String product_article_type = "null";
-    public String product_category = "null";
-    public String product_subcategory = "null";
-    public String product_link = "null";
-    public String product_image_link = "null";
+//    public String product_category = "null";
+//    public String product_subcategory = "null";
+//    public String product_link = "null";
+//    public String product_image_link = "null";
     public String redirect_link = "null";
 }

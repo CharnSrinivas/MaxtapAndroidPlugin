@@ -4,7 +4,7 @@ import android.graphics.Color;
 
 public final class Config {
 
-    public final static String CloudBucketUrl = "https://storage.googleapis.com/maxtap-adserver-dev.appspot.com/";
+    public final static String CloudBucketUrl = "https://storage.googleapis.com/publicmaxtap-prod.appspot.com/data/";
     public final static int AdImagePrecacheingTime = 15;
     public final static String AdTextColor = "#ffffff";
     public final static int AdBgColor = Color.argb(80, 0, 0, 0);

@@ -43,27 +43,13 @@ public class ExoplayerIntegration extends AppCompatActivity {
         exoPlayer.prepare();
         //playing the video.
         exoPlayer.play();
+
+
         // Initializing
         maxTapAds = new MaxTap(this,playerView,"test_data");
         maxTapAds.init();
-//        exoPlayer.seekTo(15* 1000L);
         // Update ads for every one second
         maxtapAdHandler.postDelayed(maxtapAdRunnable, 500);
     }
 
-    public void seekTo(long time) throws InterruptedException {
-        Log.i("test_log",time+"");
-        exoPlayer.seekTo(time);
-        AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return  null;
-            }
-        }.execute();
-    }
 }

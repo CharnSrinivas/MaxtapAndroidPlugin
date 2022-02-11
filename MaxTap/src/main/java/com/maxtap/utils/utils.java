@@ -21,7 +21,7 @@ public class utils {
         impressionData.season = json_ad_data.has(Config.AdParms.SEASON) ? json_ad_data.getString(Config.AdParms.SEASON) : "null";
         impressionData.episode_no = json_ad_data.has(Config.AdParms.EPISODE_NO) ? json_ad_data.getInt(Config.AdParms.EPISODE_NO) : 0;
         impressionData.content_duration = json_ad_data.has(Config.AdParms.CONTENT_DURATION) ? json_ad_data.getInt(Config.AdParms.CONTENT_DURATION) : 0;
-        impressionData.content_language = json_ad_data.has(Config.AdParms.CONTENT_LANGUAGE) ? json_ad_data.getString(Config.AdParms.CONTENT_LANGUAGE) : "null";
+//        impressionData.content_language = json_ad_data.has(Config.AdParms.CONTENT_LANGUAGE) ? json_ad_data.getString(Config.AdParms.CONTENT_LANGUAGE) : "null";
         impressionData.advertiser = json_ad_data.has(Config.AdParms.ADVERTISER) ? json_ad_data.getString(Config.AdParms.ADVERTISER) : "null";
         impressionData.ad_id = json_ad_data.has(Config.AdParms.AD_ID) ? json_ad_data.getString(Config.AdParms.AD_ID) : "null";
         impressionData.caption = json_ad_data.has(Config.AdParms.CAPTION) ? json_ad_data.getString(Config.AdParms.CAPTION):"null";
@@ -33,10 +33,10 @@ public class utils {
         impressionData.gender = json_ad_data.has(Config.AdParms.GENDER) ? json_ad_data.getString(Config.AdParms.GENDER) : "null";
         impressionData.product_details = json_ad_data.has(Config.AdParms.PRODUCT_DETAILS) ? json_ad_data.getString(Config.AdParms.PRODUCT_DETAILS) : "null";
         impressionData.product_article_type = json_ad_data.has(Config.AdParms.PRODUCT_ARTICLE_TYPE) ? json_ad_data.getString(Config.AdParms.PRODUCT_ARTICLE_TYPE) : "null";
-        impressionData.product_category = json_ad_data.has(Config.AdParms.PRODUCT_CATEGORY) ? json_ad_data.getString(Config.AdParms.PRODUCT_CATEGORY) : "null";
-        impressionData.product_subcategory = json_ad_data.has(Config.AdParms.PRODUCT_SUBCATEGORY) ? json_ad_data.getString(Config.AdParms.PRODUCT_SUBCATEGORY) : "null";
-        impressionData.product_link = json_ad_data.has(Config.AdParms.PRODUCT_LINK) ? json_ad_data.getString(Config.AdParms.PRODUCT_LINK) : "null";
-        impressionData.product_image_link = json_ad_data.has(Config.AdParms.PRODUCT_IMAGE_LINK) ? json_ad_data.getString(Config.AdParms.PRODUCT_IMAGE_LINK) : "null";
+//        impressionData.product_category = json_ad_data.has(Config.AdParms.PRODUCT_CATEGORY) ? json_ad_data.getString(Config.AdParms.PRODUCT_CATEGORY) : "null";
+//        impressionData.product_subcategory = json_ad_data.has(Config.AdParms.PRODUCT_SUBCATEGORY) ? json_ad_data.getString(Config.AdParms.PRODUCT_SUBCATEGORY) : "null";
+//        impressionData.product_link = json_ad_data.has(Config.AdParms.PRODUCT_LINK) ? json_ad_data.getString(Config.AdParms.PRODUCT_LINK) : "null";
+//        impressionData.product_image_link = json_ad_data.has(Config.AdParms.PRODUCT_IMAGE_LINK) ? json_ad_data.getString(Config.AdParms.PRODUCT_IMAGE_LINK) : "null";
         impressionData.redirect_link = json_ad_data.has(Config.AdParms.REDIRECT_LINK) ? json_ad_data.getString(Config.AdParms.REDIRECT_LINK) : "null";
 
 
@@ -56,7 +56,7 @@ public class utils {
         clickProperties.season = json_ad_data.has(Config.AdParms.SEASON) ? json_ad_data.getString(Config.AdParms.SEASON) : "null";
         clickProperties.episode_no = json_ad_data.has(Config.AdParms.EPISODE_NO) ? json_ad_data.getInt(Config.AdParms.EPISODE_NO) : 0;
         clickProperties.content_duration = json_ad_data.has(Config.AdParms.CONTENT_DURATION) ? json_ad_data.getInt(Config.AdParms.CONTENT_DURATION) : 0;
-        clickProperties.content_language = json_ad_data.has(Config.AdParms.CONTENT_LANGUAGE) ? json_ad_data.getString(Config.AdParms.CONTENT_LANGUAGE) : "null";
+//        clickProperties.content_language = json_ad_data.has(Config.AdParms.CONTENT_LANGUAGE) ? json_ad_data.getString(Config.AdParms.CONTENT_LANGUAGE) : "null";
         clickProperties.advertiser = json_ad_data.has(Config.AdParms.ADVERTISER) ? json_ad_data.getString(Config.AdParms.ADVERTISER) : "null";
         clickProperties.ad_id = json_ad_data.has(Config.AdParms.AD_ID) ? json_ad_data.getString(Config.AdParms.AD_ID) : "null";
         clickProperties.caption = json_ad_data.has(Config.AdParms.CAPTION) ? json_ad_data.getString(Config.AdParms.CAPTION):"null";
@@ -68,10 +68,10 @@ public class utils {
         clickProperties.gender = json_ad_data.has(Config.AdParms.GENDER) ? json_ad_data.getString(Config.AdParms.GENDER) : "null";
         clickProperties.product_details = json_ad_data.has(Config.AdParms.PRODUCT_DETAILS) ? json_ad_data.getString(Config.AdParms.PRODUCT_DETAILS) : "null";
         clickProperties.product_article_type = json_ad_data.has(Config.AdParms.PRODUCT_ARTICLE_TYPE) ? json_ad_data.getString(Config.AdParms.PRODUCT_ARTICLE_TYPE) : "null";
-        clickProperties.product_category = json_ad_data.has(Config.AdParms.PRODUCT_CATEGORY) ? json_ad_data.getString(Config.AdParms.PRODUCT_CATEGORY) : "null";
-        clickProperties.product_subcategory = json_ad_data.has(Config.AdParms.PRODUCT_SUBCATEGORY) ? json_ad_data.getString(Config.AdParms.PRODUCT_SUBCATEGORY) : "null";
-        clickProperties.product_link = json_ad_data.has(Config.AdParms.PRODUCT_LINK) ? json_ad_data.getString(Config.AdParms.PRODUCT_LINK) : "null";
-        clickProperties.product_image_link = json_ad_data.has(Config.AdParms.PRODUCT_IMAGE_LINK) ? json_ad_data.getString(Config.AdParms.PRODUCT_IMAGE_LINK) : "null";
+//        clickProperties.product_category = json_ad_data.has(Config.AdParms.PRODUCT_CATEGORY) ? json_ad_data.getString(Config.AdParms.PRODUCT_CATEGORY) : "null";
+//        clickProperties.product_subcategory = json_ad_data.has(Config.AdParms.PRODUCT_SUBCATEGORY) ? json_ad_data.getString(Config.AdParms.PRODUCT_SUBCATEGORY) : "null";
+//        clickProperties.product_link = json_ad_data.has(Config.AdParms.PRODUCT_LINK) ? json_ad_data.getString(Config.AdParms.PRODUCT_LINK) : "null";
+//        clickProperties.product_image_link = json_ad_data.has(Config.AdParms.PRODUCT_IMAGE_LINK) ? json_ad_data.getString(Config.AdParms.PRODUCT_IMAGE_LINK) : "null";
         clickProperties.redirect_link = json_ad_data.has(Config.AdParms.REDIRECT_LINK) ? json_ad_data.getString(Config.AdParms.REDIRECT_LINK) : "null";
         
         clickProperties.times_clicked = ad_data.no_of_clicks;

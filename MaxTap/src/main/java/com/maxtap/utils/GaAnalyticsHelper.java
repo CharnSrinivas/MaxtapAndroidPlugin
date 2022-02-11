@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.exoplayer2.util.Log;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.maxtap.Models.ClickEvent;
 import com.maxtap.Models.ImpressionEvent;
@@ -29,7 +30,7 @@ public class GaAnalyticsHelper {
         impressionProperties.putString("season",impressionData.season);
         impressionProperties.putInt("episode_no",impressionData.episode_no);
         impressionProperties.putInt("content_duration",impressionData.content_duration);
-        impressionProperties.putString("content_language",impressionData.content_language);
+//        impressionProperties.putString("content_language",impressionData.content_language);
         impressionProperties.putString("advertiser",impressionData.advertiser);
         impressionProperties.putString("ad_id",impressionData.ad_id);
         impressionProperties.putString("caption_regional_language",impressionData.caption);
@@ -40,46 +41,45 @@ public class GaAnalyticsHelper {
         impressionProperties.putString("gender",impressionData.gender);
         impressionProperties.putString("product_details",impressionData.product_details);
         impressionProperties.putString("product_article_type",impressionData.product_article_type);
-        impressionProperties.putString("product_category",impressionData.product_category);
-        impressionProperties.putString("product_subcategory",impressionData.product_subcategory);
-        impressionProperties.putString("product_link",impressionData.product_link);
-        impressionProperties.putString("product_image_link",impressionData.product_image_link);
+//        impressionProperties.putString("product_category",impressionData.product_category);
+//        impressionProperties.putString("product_subcategory",impressionData.product_subcategory);
+//        impressionProperties.putString("product_link",impressionData.product_link);
+//        impressionProperties.putString("product_image_link",impressionData.product_image_link);
         impressionProperties.putString("redirect_link",impressionData.redirect_link);
         impressionProperties.putInt("ad_viewed_count",impressionData.ad_viewed_count);
-
         analytics.logEvent("impression",impressionProperties);
     }
 
     public void logClickEvent(ClickEvent clickData){
 
-        Bundle impressionProperties = new Bundle();
+        Bundle clickProperties = new Bundle();
 
-        impressionProperties.putString("client_id",clickData.client_id);
-        impressionProperties.putString("client_name",clickData.client_name);
-        impressionProperties.putString("content_id",clickData.content_id);
-        impressionProperties.putString("content_name",clickData.content_name);
-        impressionProperties.putString("content_type",clickData.content_type);
-        impressionProperties.putString("show_name",clickData.show_name);
-        impressionProperties.putString("season",clickData.season);
-        impressionProperties.putInt("episode_no",clickData.episode_no);
-        impressionProperties.putInt("content_duration",clickData.content_duration);
-        impressionProperties.putString("content_language",clickData.content_language);
-        impressionProperties.putString("advertiser",clickData.advertiser);
-        impressionProperties.putString("ad_id",clickData.ad_id);
-        impressionProperties.putString("caption",clickData.caption);
-        impressionProperties.putString("caption_english",clickData.caption_english);
-        impressionProperties.putInt("start_time",clickData.start_time);
-        impressionProperties.putInt("end_time",clickData.end_time);
-        impressionProperties.putInt("ad_duration",clickData.ad_duration);
-        impressionProperties.putString("gender",clickData.gender);
-        impressionProperties.putString("product_details",clickData.product_details);
-        impressionProperties.putString("product_article_type",clickData.product_article_type);
-        impressionProperties.putString("product_category",clickData.product_category);
-        impressionProperties.putString("product_subcategory",clickData.product_subcategory);
-        impressionProperties.putString("product_link",clickData.product_link);
-        impressionProperties.putString("product_image_link",clickData.product_image_link);
-        impressionProperties.putString("redirect_link",clickData.redirect_link);
-        impressionProperties.putInt("times_clicked",clickData.times_clicked);
-        analytics.logEvent("click",impressionProperties);
+        clickProperties.putString("client_id",clickData.client_id);
+        clickProperties.putString("client_name",clickData.client_name);
+        clickProperties.putString("content_id",clickData.content_id);
+        clickProperties.putString("content_name",clickData.content_name);
+        clickProperties.putString("content_type",clickData.content_type);
+        clickProperties.putString("show_name",clickData.show_name);
+        clickProperties.putString("season",clickData.season);
+        clickProperties.putInt("episode_no",clickData.episode_no);
+        clickProperties.putInt("content_duration",clickData.content_duration);
+//        impressionProperties.putString("content_language",clickData.content_language);
+        clickProperties.putString("advertiser",clickData.advertiser);
+        clickProperties.putString("ad_id",clickData.ad_id);
+        clickProperties.putString("caption",clickData.caption);
+        clickProperties.putString("caption_english",clickData.caption_english);
+        clickProperties.putInt("start_time",clickData.start_time);
+        clickProperties.putInt("end_time",clickData.end_time);
+        clickProperties.putInt("ad_duration",clickData.ad_duration);
+        clickProperties.putString("gender",clickData.gender);
+        clickProperties.putString("product_details",clickData.product_details);
+        clickProperties.putString("product_article_type",clickData.product_article_type);
+//        impressionProperties.putString("product_category",clickData.product_category);
+//        impressionProperties.putString("product_subcategory",clickData.product_subcategory);
+//        impressionProperties.putString("product_link",clickData.product_link);
+//        impressionProperties.putString("product_image_link",clickData.product_image_link);
+        clickProperties.putString("redirect_link",clickData.redirect_link);
+        clickProperties.putInt("times_clicked",clickData.times_clicked);
+        analytics.logEvent("click",clickProperties);
     }
 }
