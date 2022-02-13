@@ -1,5 +1,3 @@
-apply plugin: 'com.github.CharnSrinivas.MaxtapAndroidPlugin'
-group = 'com.github.CharnSrinivas'
 plugins {
     id 'com.android.library'
 }
