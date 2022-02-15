@@ -39,8 +39,6 @@ public class BrightcovePlayerIntegration extends BrightcovePlayer {
         }
         brightcoveVideoView.add(video);
         brightcoveVideoView.start();
-//        brightcoveVideoView.seekTo(15*1000);
-//        this.getBrightcoveVideoView().seekTo(15*1000);
         maxTapAds = new MaxTap(this, brightcoveVideoView, "test_data");
         maxTapAds.init();
         maxtapAdHandler.postDelayed(maxtapAdRunnable, 500);
