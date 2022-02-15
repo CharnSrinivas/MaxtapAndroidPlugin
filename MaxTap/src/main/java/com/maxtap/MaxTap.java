@@ -60,7 +60,7 @@ public class MaxTap extends AppCompatActivity {
             screen_width = displayMetrics.widthPixels;
             initializeComponent();
         });
-        // Asynchronously fetch json ad data and prefetch
+        // Asynchronously fetch json ad data and prefetch in new thread
         new Thread(() -> {
             String url;
             if (content_id.contains(".json")) {
@@ -156,7 +156,10 @@ public class MaxTap extends AppCompatActivity {
                 String ad_text = ad_data.caption;
                 String redirect_link = ad_data.redirect_link;
                 boolean is_in_range = (currentPosition >= startTime && currentPosition <= endTime);
-                boolean can_prefetch = (startTime - currentPosition <= Config.AdImagePrecacheingTime && startTime - currentPosition >= 0) && !ad_data.image_loaded && !ad_data.image_loading;
+                boolean can_prefetch = (startTime - currentPosition <= Config.AdImagePrecacheingTime && startTime - currentPosition >= 0)
+                        && !ad_data.image_loaded && !ad_data.image_loading;
+
+                // Checking if image is already loaded (or) loading
                 if (can_prefetch) {
                     ImageCache.getInstance().cache(ad_data);
                 }
@@ -166,15 +169,17 @@ public class MaxTap extends AppCompatActivity {
                         this.current_ad_index = index;
                         Bitmap bitmap = ImageCache.getInstance().retrieveBitmapFromCache(ad_data.imageLink);
                         if (bitmap == null) break;
-                        // Set visibility iff we find cached image data
+                        // Show ads  if we find cached image data
                         ad_container.setVisibility(View.VISIBLE);
                         adImage.setImageBitmap(bitmap);
                         adText.setText(ad_text);
                         int finalIndex = index;
                         ad_container.setOnClickListener((View ad) -> {
+                            // Increasing no.of ad clicks
                             ad_data.no_of_clicks++;
                             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(redirect_link)));
                             try {
+                                // Triggering analytics click event
                                 analyticsHelper.logClickEvent(utils.createGAClickProperties(ad_data_json.getJSONObject(finalIndex), ad_data));
                             } catch (JSONException e) {
                                 e.printStackTrace();
