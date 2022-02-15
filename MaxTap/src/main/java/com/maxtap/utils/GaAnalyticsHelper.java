@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-
-import com.google.android.exoplayer2.util.Log;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.maxtap.Models.ClickEvent;
 import com.maxtap.Models.ImpressionEvent;
