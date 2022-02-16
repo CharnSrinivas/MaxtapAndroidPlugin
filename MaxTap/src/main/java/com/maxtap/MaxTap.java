@@ -105,7 +105,6 @@ public class MaxTap extends AppCompatActivity {
         ad_container.setBackgroundColor(Config.AdBgColor);
         ad_container.setId(R.id.maxtap_container_id);
         ad_container.setVisibility(View.GONE);
-
         // Ad container layout
         LayoutParams ad_container_parms = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 

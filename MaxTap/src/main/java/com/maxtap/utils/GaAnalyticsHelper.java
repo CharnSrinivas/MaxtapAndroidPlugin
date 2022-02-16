@@ -2,6 +2,7 @@ package com.maxtap.utils;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -45,6 +46,7 @@ public class GaAnalyticsHelper {
 //        impressionProperties.putString("product_image_link",impressionData.product_image_link);
         impressionProperties.putString("redirect_link",impressionData.redirect_link);
         impressionProperties.putInt("ad_viewed_count",impressionData.ad_viewed_count);
+        Log.i("test_log","logging impressionon event");
         analytics.logEvent("impression",impressionProperties);
     }
 
@@ -78,6 +80,7 @@ public class GaAnalyticsHelper {
 //        impressionProperties.putString("product_image_link",clickData.product_image_link);
         clickProperties.putString("redirect_link",clickData.redirect_link);
         clickProperties.putInt("times_clicked",clickData.times_clicked);
+        Log.i("test_log","click impressionon event");
         analytics.logEvent("click",clickProperties);
     }
 }
