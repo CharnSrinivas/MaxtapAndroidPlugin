@@ -13,11 +13,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.maxtap.R;
-
 import net.maxtap.android_sdk.Models.AdData;
 import net.maxtap.android_sdk.utils.GaAnalyticsHelper;
 import net.maxtap.android_sdk.utils.HttpHandler;
@@ -70,23 +66,22 @@ public class Component extends AppCompatActivity {
 
             // Asynchronously fetch json ad data and prefetch in new thread
             new Thread(() -> {
-                String url;
+                String dataUrl;
                 // Adding '.json' at the end of content id
                 if (content_id.contains(".json")) {
-                    url = Config.CloudBucketUrl + content_id;
+                    dataUrl = Config.CloudBucketUrl + content_id;
                 } else {
-                    url = Config.CloudBucketUrl + content_id + ".json";
+                    dataUrl = Config.CloudBucketUrl + content_id + ".json";
                 }
-                String response_data = new HttpHandler().makeServiceCall(url);
+                String response_data = new HttpHandler().makeServiceCall(dataUrl);
                 try {
                     ad_data_json = new JSONArray(response_data);
-
                     for (int i = 0; i < ad_data_json.length(); i++) {
-                        AdData ad = new AdData();
                         boolean is_valid_data = true;
                         JSONObject json_ad = ad_data_json.getJSONObject(i);
-                    /* Checking if every ad data have required parameters.
-                    and removing only that particular ad from ad_data showing rest of ads
+                    /*
+                    Checking if every ad data have required parameters.
+                    if not then removing or (not showing)  only that particular ad
                      */
                         for (String parm : Config.AdParms.REQUIRED) {
                             if (!json_ad.has(parm)) {
@@ -94,8 +89,11 @@ public class Component extends AppCompatActivity {
                                 break;
                             }
                         }
+                        // If not valid (requiied)
                         if (!is_valid_data) continue;
 
+                        /*Creating ad object with required data and pushing to ads_data array*/
+                        AdData ad = new AdData();
                         ad.startTime = json_ad.getInt(Config.AdParms.START_TIME);
                         ad.end_time = json_ad.getInt(Config.AdParms.END_TIME);
                         ad.ad_text =json_ad.has(Config.AdParms.CAPTION_REGIONAL_LANGUAGE)? json_ad.getString(Config.AdParms.CAPTION_REGIONAL_LANGUAGE) :
@@ -132,19 +130,21 @@ public class Component extends AppCompatActivity {
         // Ad container layout
         FrameLayout.LayoutParams ad_container_parms = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
+        /*          Configuring ad layout according screen width and screen height          */
+
         int img_width;
         if (this.screen_height > this.screen_width) {
-            // Portrait config
+            // Ad Portrait config
             img_width = this.screen_height * 8 / 100;
             ad_container_parms.bottomMargin = this.screen_height * 10 / 100;
             adText.setMaxWidth((int) (2.5 * img_width));
         } else {
-            // Landscape config
+            // Ad Landscape config
             img_width = this.screen_width * 10 / 100;
             ad_container_parms.bottomMargin = this.screen_height * 12 / 100;
             adText.setMaxWidth((2 * img_width));
         }
-        // Image layout
+        // Ad Image layout
         FrameLayout.LayoutParams imageParams = new FrameLayout.LayoutParams(img_width, img_width);
         imageParams.setMargins(10, 10, 10, 10);
         imageParams.gravity = Gravity.RIGHT;
@@ -159,35 +159,35 @@ public class Component extends AppCompatActivity {
         ad_container_parms.gravity = Gravity.RIGHT | Gravity.BOTTOM;
         ad_container_parms.rightMargin = this.screen_width / 200;
 
-        // Adding views to FrameLayout
+        // Adding views to FrameLayout (Ad container)
         ad_container.addView(adImage);
         ad_container.addView(adText);
-
+        // Putting Ad Container in video view
         ((ViewGroup) video_player).addView(ad_container, ad_container_parms);
         isInitialized = true;
-        utils.log("Check point -3 "+ad_container);
     }
 
     public void updateAds(long currentPosition) {
         try {
             currentPosition /= 1000;
-            if (ad_container == null) {
-                utils.log("no ad container");
-                return;
-            }
-            if (ads_data == null)
-            {
-                return;
-            }
-            boolean visible = false;
+            if (ad_container == null) return;
+            if (ads_data == null)return;
+
+            boolean can_ad_visible = false;
             for (int index = 0; index < ads_data.size(); index++) {
                 AdData ad_data = ads_data.get(index);
                 int startTime = ad_data.startTime;
                 int endTime = ad_data.end_time;
                 /*
-                if caption_regional_language available set that else if cation available set that else set DefaultAdCaption
+                if caption_regional_language available
+                    set that as ad_text
+                 else if cation available
+                    set that as ad_text
+                 else if article type
+                    set "Get this "+ article_type + "now"
+                 else
+                    set "Get this now"
                 */
-
                 String redirect_link = ad_data.redirect_link;
                 boolean is_in_range = (currentPosition >= startTime && currentPosition <= endTime);
                 boolean can_prefetch = (startTime - currentPosition <= Config.AdImagePrecacheingTime && startTime - currentPosition >= 0)
@@ -197,36 +197,39 @@ public class Component extends AppCompatActivity {
                 if (can_prefetch) {
                     ImageCache.getInstance().cache(ad_data);
                 }
+
                 if (is_in_range) {
-                    visible = true;
+                    can_ad_visible = true;
                     if (this.current_ad_index != index && ad_data.image_loaded) {
-                        utils.log("check point -4 "+this.current_ad_index +"  "+index);
                         this.current_ad_index = index;
                         Bitmap bitmap = ImageCache.getInstance().retrieveBitmapFromCache(ad_data.imageLink);
+                        // Show ads if we find cached image data (or) show ad only when image is loaded
                         if (bitmap == null) break;
-                        // Show ads  if we find cached image data
                         ad_container.setVisibility(View.VISIBLE);
                         adImage.setImageBitmap(bitmap);
                         adText.setText(ad_data.ad_text);
                         int finalIndex = index;
                         ad_container.setOnClickListener((View ad) -> {
-                            // Increasing no.of ad clicks
+                            // ⬆️ Increasing no.of ad clicks
                             ad_data.no_of_clicks++;
                             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(redirect_link)));
                             try {
-                                // Triggering analytics click event
+                                // 📈 Triggering analytics click event
                                 analyticsHelper.logClickEvent(utils.createGAClickProperties(ad_data_json.getJSONObject(finalIndex), ad_data));
                             } catch (JSONException e) {
                                 utils.printError(e);
                                 e.printStackTrace();
                             }
                         });
+                        //⬆️ Increasing no.of ad views
                         ad_data.no_of_views++;
+                        // Triggering analytics click event
                         analyticsHelper.logImpressionEvent(utils.createGAImpressionProperties(ad_data_json.getJSONObject(index), ad_data));
                     }
                 }
             }
-            if (!visible) {
+            if (!can_ad_visible) {
+                this.current_ad_index = -1;
                 ad_container.setVisibility(View.GONE);
             }
 
@@ -239,9 +242,8 @@ public class Component extends AppCompatActivity {
 
     public void remove() {
         try {
-            utils.log("Removing");
+            //❌ Removing ad component from layout
             if (context!=null && ((Activity) context).findViewById(R.id.maxtap_container_id) != null) {
-                utils.log("Removing component");
                 ((ViewGroup) video_player).removeView(((Activity) context).findViewById(R.id.maxtap_container_id));
             }
             this.ad_container = null;
