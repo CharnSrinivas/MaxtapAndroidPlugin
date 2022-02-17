@@ -11,7 +11,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.brightcove_watch).setOnClickListener((start_button)->{
-            startActivity(new Intent(MainActivity.this, BrightcovePlayerIntegration.class));
+            startActivity(new Intent(MainActivity.this, ContentId.class));
         });
         findViewById(R.id.exoplayer_watch).setOnClickListener((start_button)->{
             startActivity(new Intent(MainActivity.this, ExoplayerIntegration.class));

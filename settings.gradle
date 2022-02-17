@@ -14,4 +14,3 @@ dependencyResolutionManagement {
 rootProject.name = "MaxTap_Sdk"
 include ':app'
 include ':MaxTap'
-//include ':maxtap'

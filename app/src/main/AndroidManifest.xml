@@ -21,6 +21,7 @@
         </activity>
         <activity android:name=".BrightcovePlayerIntegration"></activity>
         <activity android:name=".ExoplayerIntegration"></activity>
+        <activity android:name=".ContentId"></activity>
     </application>
 
 </manifest>

@@ -6,20 +6,19 @@ import android.os.Handler;
 import com.brightcove.player.model.DeliveryType;
 import com.brightcove.player.model.Video;
 import com.brightcove.player.view.BrightcovePlayer;
-import com.maxtap.MaxTap;
+import net.maxtap.android_sdk.Maxtap;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
 
 public class BrightcovePlayerIntegration extends BrightcovePlayer {
-    MaxTap maxTapAds;
     //    ExoPlayer exoPlayer;
     Handler maxtapAdHandler = new Handler();
     Runnable maxtapAdRunnable = new Runnable() {
         @Override
         public void run() {
-            maxTapAds.updateAds(brightcoveVideoView.getCurrentPosition());
+            Maxtap.MaxtapComponent().updateAds(brightcoveVideoView.getCurrentPosition());
             maxtapAdHandler.postDelayed(maxtapAdRunnable, 500);
         }
     };
@@ -29,7 +28,7 @@ public class BrightcovePlayerIntegration extends BrightcovePlayer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.brightcove_player);
         brightcoveVideoView = findViewById(R.id.video_player);
-        Video video = Video.createVideo("android.resource://"+getPackageName()+"/"+R.raw.sample_video, DeliveryType.MP4);
+        Video video = Video.createVideo("android.resource://"+getPackageName()+"/"+R.raw.sample_mp4, DeliveryType.MP4);
 
         try {
             java.net.URI myposterImage = new URI("https://sdks.support.brightcove.com/assets/images/general/Great-Blue-Heron.png");
@@ -39,9 +38,14 @@ public class BrightcovePlayerIntegration extends BrightcovePlayer {
         }
         brightcoveVideoView.add(video);
         brightcoveVideoView.start();
-        maxTapAds = new MaxTap(this, brightcoveVideoView, "test_data");
-        maxTapAds.init();
+        String content_id = getIntent().getStringExtra("content_id") != null ?getIntent().getStringExtra("content_id") : "6272262646001";
+        Maxtap.MaxtapComponent().init(this,brightcoveVideoView,content_id);
         maxtapAdHandler.postDelayed(maxtapAdRunnable, 500);
+    }
+    @Override
+    protected void onDestroy() {
+        maxtapAdHandler.removeCallbacks(maxtapAdRunnable);
+        super.onDestroy();
     }
 
 }
