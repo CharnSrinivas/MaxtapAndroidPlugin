@@ -27,7 +27,7 @@ public class utils {
         impressionData.content_name = json_ad_data.has(Config.AdParms.CONTENT_NAME) ? json_ad_data.getString(Config.AdParms.CONTENT_NAME) : "null";
         impressionData.content_type = json_ad_data.has(Config.AdParms.CONTENT_TYPE) ? json_ad_data.getString(Config.AdParms.CONTENT_TYPE) : "null";
         impressionData.show_name = json_ad_data.has(Config.AdParms.SHOW_NAME) ? json_ad_data.getString(Config.AdParms.SHOW_NAME) : "null";
-        impressionData.season = json_ad_data.has(Config.AdParms.SEASON) ? json_ad_data.getString(Config.AdParms.SEASON) : "null";
+        impressionData.season = json_ad_data.has(Config.AdParms.SEASON) ? json_ad_data.getInt(Config.AdParms.SEASON) :0;
         impressionData.episode_no = json_ad_data.has(Config.AdParms.EPISODE_NO) ? json_ad_data.getInt(Config.AdParms.EPISODE_NO) : 0;
         impressionData.duration = json_ad_data.has(Config.AdParms.DURATION) ? json_ad_data.getInt(Config.AdParms.DURATION) : 0;
         impressionData.content_language = json_ad_data.has(Config.AdParms.CONTENT_LANGUAGE) ? json_ad_data.getString(Config.AdParms.CONTENT_LANGUAGE) : "null";
@@ -59,7 +59,7 @@ public class utils {
         clickData.content_name = json_ad_data.has(Config.AdParms.CONTENT_NAME) ? json_ad_data.getString(Config.AdParms.CONTENT_NAME) : "null";
         clickData.content_type = json_ad_data.has(Config.AdParms.CONTENT_TYPE) ? json_ad_data.getString(Config.AdParms.CONTENT_TYPE) : "null";
         clickData.show_name = json_ad_data.has(Config.AdParms.SHOW_NAME) ? json_ad_data.getString(Config.AdParms.SHOW_NAME) : "null";
-        clickData.season = json_ad_data.has(Config.AdParms.SEASON) ? json_ad_data.getString(Config.AdParms.SEASON) : "null";
+        clickData.season = json_ad_data.has(Config.AdParms.SEASON) ? json_ad_data.getInt(Config.AdParms.SEASON) : 0;
         clickData.episode_no = json_ad_data.has(Config.AdParms.EPISODE_NO) ? json_ad_data.getInt(Config.AdParms.EPISODE_NO) : 0;
         clickData.duration = json_ad_data.has(Config.AdParms.DURATION) ? json_ad_data.getInt(Config.AdParms.DURATION) : 0;
         clickData.content_language = json_ad_data.has(Config.AdParms.CONTENT_LANGUAGE) ? json_ad_data.getString(Config.AdParms.CONTENT_LANGUAGE) : "null";

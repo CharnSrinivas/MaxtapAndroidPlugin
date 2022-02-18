@@ -37,7 +37,7 @@ public class GaAnalyticsHelper {
         impressionProperties.putString("product_details",impressionData.product_details);
         impressionProperties.putString("redirect_link",impressionData.redirect_link);
         impressionProperties.putString("redirect_link_type",impressionData.redirect_link_type);
-        impressionProperties.putString("season",impressionData.season);
+//        impressionProperties.putInt("season",impressionData.season);
         impressionProperties.putString("show_name",impressionData.show_name);
         impressionProperties.putInt("start_time",impressionData.start_time);
         impressionProperties.putString("subcategory",impressionData.subcategory);
@@ -71,7 +71,7 @@ public class GaAnalyticsHelper {
         clickProperties.putString("product_details",clickData.product_details);
         clickProperties.putString("redirect_link",clickData.redirect_link);
         clickProperties.putString("redirect_link_type",clickData.redirect_link_type);
-        clickProperties.putString("season",clickData.season);
+//        clickProperties.putInt("season",clickData.season);
         clickProperties.putString("show_name",clickData.show_name);
         clickProperties.putInt("start_time",clickData.start_time);
         clickProperties.putString("subcategory",clickData.subcategory);

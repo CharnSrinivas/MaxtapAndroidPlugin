@@ -7,7 +7,7 @@ public class GaEvent {
     public String content_name = "null";
     public String content_type = "null";
     public String show_name = "null";
-    public String season = "null";
+    public int season = 0;
     public int episode_no = 0;
     public int duration = 0;
     public  String update_time ="null";
