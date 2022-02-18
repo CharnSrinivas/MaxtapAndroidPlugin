@@ -20,14 +20,13 @@ public class GaAnalyticsHelper {
         Bundle impressionProperties = new Bundle();
         impressionProperties.putString("update_time",impressionData.update_time);
         impressionProperties.putString("client_name",impressionData.client_name);
-        impressionProperties.putString("client_name",impressionData.client_name);
         impressionProperties.putString("content_id",impressionData.content_id);
         impressionProperties.putString("content_name",impressionData.content_name);
         impressionProperties.putString("content_type",impressionData.content_type);
         impressionProperties.putString("show_name",impressionData.show_name);
         impressionProperties.putString("season",impressionData.season);
         impressionProperties.putInt("episode_no",impressionData.episode_no);
-        impressionProperties.putInt("content_duration",impressionData.duration);
+        impressionProperties.putInt("duration",impressionData.duration);
         impressionProperties.putString("content_language",impressionData.content_language);
         impressionProperties.putString("advertiser_name",impressionData.advertiser_name);
         impressionProperties.putString("document_id",impressionData.document_id);
@@ -38,12 +37,9 @@ public class GaAnalyticsHelper {
         impressionProperties.putInt("end_time",impressionData.end_time);
         impressionProperties.putInt("duration",impressionData.duration);
         impressionProperties.putString("gender",impressionData.gender);
-        impressionProperties.putString("details",impressionData.product_details);
+        impressionProperties.putString("details",impressionData.details);
         impressionProperties.putString("article_type",impressionData.article_type);
         impressionProperties.putString("category",impressionData.category);
-        impressionProperties.putString("subcategory",impressionData.subcategory);
-        impressionProperties.putString("content_language",impressionData.content_language);
-        impressionProperties.putString("content_language",impressionData.content_language);
         impressionProperties.putString("subcategory",impressionData.subcategory);
 
         impressionProperties.putInt("ad_viewed_count",impressionData.ad_viewed_count);
@@ -54,6 +50,7 @@ public class GaAnalyticsHelper {
     public void logClickEvent(ClickEvent clickData){
 
         Bundle clickProperties = new Bundle();
+
         clickProperties.putString("update_time",clickData.update_time);
         clickProperties.putString("client_name",clickData.client_name);
         clickProperties.putString("content_id",clickData.content_id);
@@ -73,13 +70,11 @@ public class GaAnalyticsHelper {
         clickProperties.putInt("end_time",clickData.end_time);
         clickProperties.putInt("duration",clickData.duration);
         clickProperties.putString("gender",clickData.gender);
-        clickProperties.putString("product_details",clickData.product_details);
-        clickProperties.putString("product_article_type",clickData.article_type);
+        clickProperties.putString("details",clickData.details);
+        clickProperties.putString("article_type",clickData.article_type);
         clickProperties.putString("category",clickData.category);
         clickProperties.putString("subcategory",clickData.subcategory);
-        clickProperties.putString("content_language",clickData.content_language);
-        clickProperties.putString("content_language",clickData.content_language);
-        clickProperties.putString("subcategory",clickData.subcategory);
+
         clickProperties.putInt("times_clicked",clickData.times_clicked);
         analytics.logEvent("click",clickProperties);
     }

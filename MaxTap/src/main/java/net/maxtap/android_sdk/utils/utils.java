@@ -37,7 +37,7 @@ public class utils {
         impressionData.start_time = json_ad_data.has(Config.AdParms.START_TIME) ? json_ad_data.getInt(Config.AdParms.START_TIME) : 0;
         impressionData.end_time = json_ad_data.has(Config.AdParms.END_TIME) ? json_ad_data.getInt(Config.AdParms.END_TIME) : 0;
         impressionData.gender = json_ad_data.has(Config.AdParms.GENDER) ? json_ad_data.getString(Config.AdParms.GENDER) : "null";
-        impressionData.product_details = json_ad_data.has(Config.AdParms.PRODUCT_DETAILS) ? json_ad_data.getString(Config.AdParms.PRODUCT_DETAILS) : "null";
+        impressionData.details = json_ad_data.has(Config.AdParms.PRODUCT_DETAILS) ? json_ad_data.getString(Config.AdParms.PRODUCT_DETAILS) : "null";
         impressionData.article_type = json_ad_data.has(Config.AdParms.ARTICLE_TYPE) ? json_ad_data.getString(Config.AdParms.ARTICLE_TYPE) : "null";
         impressionData.category = json_ad_data.has(Config.AdParms.CATEGORY) ? json_ad_data.getString(Config.AdParms.CATEGORY) : "null";
         impressionData.subcategory = json_ad_data.has(Config.AdParms.SUBCATEGORY) ? json_ad_data.getString(Config.AdParms.SUBCATEGORY) : "null";
@@ -67,7 +67,7 @@ public class utils {
         clickProperties.end_time = json_ad_data.has(Config.AdParms.END_TIME) ? json_ad_data.getInt(Config.AdParms.END_TIME) : 0;
         clickProperties.duration = json_ad_data.has(Config.AdParms.DURATION) ? json_ad_data.getInt(Config.AdParms.DURATION) : 0;
         clickProperties.gender = json_ad_data.has(Config.AdParms.GENDER) ? json_ad_data.getString(Config.AdParms.GENDER) : "null";
-        clickProperties.product_details = json_ad_data.has(Config.AdParms.PRODUCT_DETAILS) ? json_ad_data.getString(Config.AdParms.PRODUCT_DETAILS) : "null";
+        clickProperties.details = json_ad_data.has(Config.AdParms.PRODUCT_DETAILS) ? json_ad_data.getString(Config.AdParms.PRODUCT_DETAILS) : "null";
         clickProperties.article_type = json_ad_data.has(Config.AdParms.ARTICLE_TYPE) ? json_ad_data.getString(Config.AdParms.ARTICLE_TYPE) : "null";
         clickProperties.category = json_ad_data.has(Config.AdParms.CATEGORY) ? json_ad_data.getString(Config.AdParms.CATEGORY) : "null";
         clickProperties.subcategory = json_ad_data.has(Config.AdParms.SUBCATEGORY) ? json_ad_data.getString(Config.AdParms.SUBCATEGORY) : "null";

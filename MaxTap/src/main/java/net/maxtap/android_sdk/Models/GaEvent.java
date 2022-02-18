@@ -24,7 +24,7 @@ public class GaEvent {
     public int end_time = 0;
     public String content_language="null";
     public String gender = "null";
-    public String product_details = "null";
+    public String details = "null";
     public String article_type = "null";
     public String category = "null";
     public String subcategory = "null";
