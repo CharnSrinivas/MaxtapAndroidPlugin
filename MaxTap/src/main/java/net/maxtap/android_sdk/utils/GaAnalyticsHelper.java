@@ -46,7 +46,7 @@ public class GaAnalyticsHelper {
         impressionProperties.putInt("ad_viewed_count",impressionData.ad_viewed_count);
 
         utils.log("Impression Event ");
-        analytics.logEvent("charan_impression",impressionProperties);
+        analytics.logEvent("impression",impressionProperties);
     }
 
     public void logClickEvent(ClickEvent clickData){
@@ -77,7 +77,7 @@ public class GaAnalyticsHelper {
         clickProperties.putString("subcategory",clickData.subcategory);
         clickProperties.putString("update_time",clickData.update_time);
         //clickProperties.putString("create_time",clickData.create_time);
-        clickProperties.putInt("clicked",clickData.times_clicked);
-        analytics.logEvent("charan_click",clickProperties);
+        clickProperties.putInt("no_of_clicks",clickData.times_clicked);
+        analytics.logEvent("click",clickProperties);
     }
 }
