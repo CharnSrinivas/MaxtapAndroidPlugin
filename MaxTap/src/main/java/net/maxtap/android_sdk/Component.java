@@ -98,7 +98,7 @@ public class Component extends AppCompatActivity {
                         ad.end_time = json_ad.getInt(Config.AdParms.END_TIME);
                         ad.ad_text =json_ad.has(Config.AdParms.CAPTION_REGIONAL_LANGUAGE)? json_ad.getString(Config.AdParms.CAPTION_REGIONAL_LANGUAGE) :
                         json_ad.has(Config.AdParms.CAPTION) ? json_ad.getString(Config.AdParms.CAPTION):
-                        json_ad.has(Config.AdParms.ARTICLE_TYPE) ? "Get this "+json_ad.getString(Config.AdParms.ARTICLE_TYPE)+" now": "Get this now";
+                        json_ad.has(Config.AdParms.ARTICLE_TYPE) ? "Get this "+json_ad.getString(Config.AdParms.ARTICLE_TYPE)+" now": Config.DefaultAdCaption;
 
                         ad.imageLink = json_ad.getString(Config.AdParms.IMAGE_LINK);
                         ad.redirect_link = json_ad.getString(Config.AdParms.REDIRECT_LINK);
@@ -260,5 +260,4 @@ public class Component extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 }

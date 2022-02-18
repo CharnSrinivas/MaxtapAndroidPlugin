@@ -18,8 +18,8 @@ public class GaAnalyticsHelper {
 
     public void logImpressionEvent(@NonNull ImpressionEvent impressionData) {
         Bundle impressionProperties = new Bundle();
-
-        impressionProperties.putString("client_id",impressionData.client_id);
+        impressionProperties.putString("update_time",impressionData.update_time);
+        impressionProperties.putString("client_name",impressionData.client_name);
         impressionProperties.putString("client_name",impressionData.client_name);
         impressionProperties.putString("content_id",impressionData.content_id);
         impressionProperties.putString("content_name",impressionData.content_name);
@@ -27,22 +27,25 @@ public class GaAnalyticsHelper {
         impressionProperties.putString("show_name",impressionData.show_name);
         impressionProperties.putString("season",impressionData.season);
         impressionProperties.putInt("episode_no",impressionData.episode_no);
-        impressionProperties.putInt("content_duration",impressionData.content_duration);
-//        impressionProperties.putString("content_language",impressionData.content_language);
-        impressionProperties.putString("advertiser",impressionData.advertiser);
-        impressionProperties.putString("ad_id",impressionData.ad_id);
+        impressionProperties.putInt("content_duration",impressionData.duration);
+        impressionProperties.putString("content_language",impressionData.content_language);
+        impressionProperties.putString("advertiser_name",impressionData.advertiser_name);
+        impressionProperties.putString("document_id",impressionData.document_id);
+        impressionProperties.putString("redirect_link_type",impressionData.redirect_link_type);
         impressionProperties.putString("caption",impressionData.caption);
+        impressionProperties.putString("caption_regional_language",impressionData.caption_regional_language);
         impressionProperties.putInt("start_time",impressionData.start_time);
         impressionProperties.putInt("end_time",impressionData.end_time);
-        impressionProperties.putInt("ad_duration",impressionData.ad_duration);
+        impressionProperties.putInt("duration",impressionData.duration);
         impressionProperties.putString("gender",impressionData.gender);
-        impressionProperties.putString("product_details",impressionData.product_details);
-        impressionProperties.putString("product_article_type",impressionData.product_article_type);
-//        impressionProperties.putString("product_category",impressionData.product_category);
-//        impressionProperties.putString("product_subcategory",impressionData.product_subcategory);
-//        impressionProperties.putString("product_link",impressionData.product_link);
-//        impressionProperties.putString("product_image_link",impressionData.product_image_link);
-        impressionProperties.putString("redirect_link",impressionData.redirect_link);
+        impressionProperties.putString("details",impressionData.product_details);
+        impressionProperties.putString("article_type",impressionData.article_type);
+        impressionProperties.putString("category",impressionData.category);
+        impressionProperties.putString("subcategory",impressionData.subcategory);
+        impressionProperties.putString("content_language",impressionData.content_language);
+        impressionProperties.putString("content_language",impressionData.content_language);
+        impressionProperties.putString("subcategory",impressionData.subcategory);
+
         impressionProperties.putInt("ad_viewed_count",impressionData.ad_viewed_count);
         utils.log("Impression Event ");
         analytics.logEvent("impression",impressionProperties);
@@ -51,8 +54,7 @@ public class GaAnalyticsHelper {
     public void logClickEvent(ClickEvent clickData){
 
         Bundle clickProperties = new Bundle();
-
-        clickProperties.putString("client_id",clickData.client_id);
+        clickProperties.putString("update_time",clickData.update_time);
         clickProperties.putString("client_name",clickData.client_name);
         clickProperties.putString("content_id",clickData.content_id);
         clickProperties.putString("content_name",clickData.content_name);
@@ -60,22 +62,24 @@ public class GaAnalyticsHelper {
         clickProperties.putString("show_name",clickData.show_name);
         clickProperties.putString("season",clickData.season);
         clickProperties.putInt("episode_no",clickData.episode_no);
-        clickProperties.putInt("content_duration",clickData.content_duration);
-//        impressionProperties.putString("content_language",clickData.content_language);
-        clickProperties.putString("advertiser",clickData.advertiser);
-        clickProperties.putString("ad_id",clickData.ad_id);
+        clickProperties.putInt("duration",clickData.duration);
+        clickProperties.putString("content_language",clickData.content_language);
+        clickProperties.putString("advertiser_name",clickData.advertiser_name);
+        clickProperties.putString("document_id",clickData.document_id);
+        clickProperties.putString("redirect_link_type",clickData.redirect_link_type);
         clickProperties.putString("caption",clickData.caption);
+        clickProperties.putString("caption_regional_language",clickData.caption_regional_language);
         clickProperties.putInt("start_time",clickData.start_time);
         clickProperties.putInt("end_time",clickData.end_time);
-        clickProperties.putInt("ad_duration",clickData.ad_duration);
+        clickProperties.putInt("duration",clickData.duration);
         clickProperties.putString("gender",clickData.gender);
         clickProperties.putString("product_details",clickData.product_details);
-        clickProperties.putString("product_article_type",clickData.product_article_type);
-//        impressionProperties.putString("product_category",clickData.product_category);
-//        impressionProperties.putString("product_subcategory",clickData.product_subcategory);
-//        impressionProperties.putString("product_link",clickData.product_link);
-//        impressionProperties.putString("product_image_link",clickData.product_image_link);
-        clickProperties.putString("redirect_link",clickData.redirect_link);
+        clickProperties.putString("product_article_type",clickData.article_type);
+        clickProperties.putString("category",clickData.category);
+        clickProperties.putString("subcategory",clickData.subcategory);
+        clickProperties.putString("content_language",clickData.content_language);
+        clickProperties.putString("content_language",clickData.content_language);
+        clickProperties.putString("subcategory",clickData.subcategory);
         clickProperties.putInt("times_clicked",clickData.times_clicked);
         analytics.logEvent("click",clickProperties);
     }
