@@ -47,7 +47,7 @@ public class GaAnalyticsHelper {
             impressionProperties.putInt("ad_viewed_count", impressionData.ad_viewed_count);
 
             utils.log("Impression Event ");
-            analytics.logEvent("test_impression", impressionProperties);
+            analytics.logEvent("impression", impressionProperties);
         }catch (Exception e){
             utils.printError(e);
             e.printStackTrace();
@@ -83,6 +83,6 @@ public class GaAnalyticsHelper {
         clickProperties.putString("update_time",clickData.update_time);
         //clickProperties.putString("create_time",clickData.create_time);
         clickProperties.putInt("no_of_clicks",clickData.times_clicked);
-        analytics.logEvent("test_click",clickProperties);
+        analytics.logEvent("click",clickProperties);
     }
 }
