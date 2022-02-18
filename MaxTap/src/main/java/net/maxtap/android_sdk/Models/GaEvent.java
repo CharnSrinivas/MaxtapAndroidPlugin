@@ -13,11 +13,7 @@ public class GaEvent {
     public  String update_time ="null";
     public  String  redirect_link_type = "null";
     public   String document_id = "null";
-
     public String advertiser_name = "null";
-
-
-    public String ad_id = "null";
     public String caption = "null";
     public String caption_regional_language = "null";
     public int start_time = 0;

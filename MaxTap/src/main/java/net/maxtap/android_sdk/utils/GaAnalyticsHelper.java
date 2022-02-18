@@ -17,36 +17,41 @@ public class GaAnalyticsHelper {
     }
 
     public void logImpressionEvent(@NonNull ImpressionEvent impressionData) {
-        Bundle impressionProperties = new Bundle();
-        impressionProperties.putString("advertiser_name",impressionData.advertiser_name);
-        impressionProperties.putString("article_type",impressionData.article_type);
-        impressionProperties.putString("caption",impressionData.caption);
-        impressionProperties.putString("caption_regional_language",impressionData.caption_regional_language);
-        impressionProperties.putString("category",impressionData.category);
-        impressionProperties.putString("client_name",impressionData.client_name);
-        impressionProperties.putString("content_id",impressionData.content_id);
-        impressionProperties.putString("content_language",impressionData.content_language);
-        impressionProperties.putString("content_link",impressionData.content_link);
-        impressionProperties.putString("content_name",impressionData.content_name);
-        impressionProperties.putString("content_type",impressionData.content_type);
-        impressionProperties.putString("document_id",impressionData.document_id);
-        impressionProperties.putInt("duration",impressionData.duration);
-        impressionProperties.putInt("end_time",impressionData.end_time);
-        impressionProperties.putInt("episode_no",impressionData.episode_no);
-        impressionProperties.putString("gender",impressionData.gender);
-        impressionProperties.putString("product_details",impressionData.product_details);
-        impressionProperties.putString("redirect_link",impressionData.redirect_link);
-        impressionProperties.putString("redirect_link_type",impressionData.redirect_link_type);
-//        impressionProperties.putInt("season",impressionData.season);
-        impressionProperties.putString("show_name",impressionData.show_name);
-        impressionProperties.putInt("start_time",impressionData.start_time);
-        impressionProperties.putString("subcategory",impressionData.subcategory);
-        impressionProperties.putString("update_time",impressionData.update_time);
-        //impressionProperties.putString("create_time",impressionData.create_time);
-        impressionProperties.putInt("ad_viewed_count",impressionData.ad_viewed_count);
+        try {
+            Bundle impressionProperties = new Bundle();
+            impressionProperties.putString("advertiser_name", impressionData.advertiser_name);
+            impressionProperties.putString("article_type", impressionData.article_type);
+            impressionProperties.putString("caption", impressionData.caption);
+            impressionProperties.putString("caption_regional_language", impressionData.caption_regional_language);
+            impressionProperties.putString("category", impressionData.category);
+            impressionProperties.putString("client_name", impressionData.client_name);
+            impressionProperties.putString("content_id", impressionData.content_id);
+            impressionProperties.putString("content_language", impressionData.content_language);
+            impressionProperties.putString("content_link", impressionData.content_link);
+            impressionProperties.putString("content_name", impressionData.content_name);
+            impressionProperties.putString("content_type", impressionData.content_type);
+            impressionProperties.putString("document_id", impressionData.document_id);
+            impressionProperties.putInt("duration", impressionData.duration);
+            impressionProperties.putInt("end_time", impressionData.end_time);
+            impressionProperties.putInt("episode_no", impressionData.episode_no);
+            impressionProperties.putString("gender", impressionData.gender);
+            impressionProperties.putString("product_details", impressionData.product_details);
+            impressionProperties.putString("redirect_link", impressionData.redirect_link);
+            impressionProperties.putString("redirect_link_type", impressionData.redirect_link_type);
+            impressionProperties.putInt("season", impressionData.season);
+            impressionProperties.putString("show_name", impressionData.show_name);
+            impressionProperties.putInt("start_time", impressionData.start_time);
+            impressionProperties.putString("subcategory", impressionData.subcategory);
+            impressionProperties.putString("update_time", impressionData.update_time);
+            //impressionProperties.putString("create_time",impressionData.create_time);
+            impressionProperties.putInt("ad_viewed_count", impressionData.ad_viewed_count);
 
-        utils.log("Impression Event ");
-        analytics.logEvent("impression",impressionProperties);
+            utils.log("Impression Event ");
+            analytics.logEvent("test_impression", impressionProperties);
+        }catch (Exception e){
+            utils.printError(e);
+            e.printStackTrace();
+        }
     }
 
     public void logClickEvent(ClickEvent clickData){
@@ -71,13 +76,13 @@ public class GaAnalyticsHelper {
         clickProperties.putString("product_details",clickData.product_details);
         clickProperties.putString("redirect_link",clickData.redirect_link);
         clickProperties.putString("redirect_link_type",clickData.redirect_link_type);
-//        clickProperties.putInt("season",clickData.season);
+        clickProperties.putInt("season",clickData.season);
         clickProperties.putString("show_name",clickData.show_name);
         clickProperties.putInt("start_time",clickData.start_time);
         clickProperties.putString("subcategory",clickData.subcategory);
         clickProperties.putString("update_time",clickData.update_time);
         //clickProperties.putString("create_time",clickData.create_time);
         clickProperties.putInt("no_of_clicks",clickData.times_clicked);
-        analytics.logEvent("click",clickProperties);
+        analytics.logEvent("test_click",clickProperties);
     }
 }
