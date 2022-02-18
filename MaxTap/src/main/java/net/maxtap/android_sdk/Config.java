@@ -36,8 +36,9 @@ public final class Config {
         public final static String CATEGORY = "category";
         public final static String SUBCATEGORY = "subcategory";
         public final static String DOCUMENT_ID = "document_id";
-
+        public final static String CONTENT_LINK = "content_link";
         public  final static String REDIRECT_LINK = "redirect_link";
+        public final static String CREATE_TIME ="create_time";
 
         public final  static String[] REQUIRED ={START_TIME,END_TIME,IMAGE_LINK};
     }
