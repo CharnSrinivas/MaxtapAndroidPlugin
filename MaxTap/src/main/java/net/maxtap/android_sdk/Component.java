@@ -19,7 +19,6 @@ import net.maxtap.android_sdk.utils.GaAnalyticsHelper;
 import net.maxtap.android_sdk.utils.HttpHandler;
 import net.maxtap.android_sdk.utils.ImageCache;
 import net.maxtap.android_sdk.utils.utils;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,13 +53,11 @@ public class Component extends AppCompatActivity {
             this.analyticsHelper = new GaAnalyticsHelper(context);
             isInitializing = true;
             // Waiting until video player is totally rendered
-            utils.log("Check point -1");
             player.post(() -> {
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 screen_height = displayMetrics.heightPixels;
                 screen_width = displayMetrics.widthPixels;
-                utils.log("Check point -2");
                 initializeComponent();
             });
 
@@ -102,7 +99,6 @@ public class Component extends AppCompatActivity {
 
                         ad.imageLink = json_ad.getString(Config.AdParms.IMAGE_LINK);
                         ad.redirect_link = json_ad.getString(Config.AdParms.REDIRECT_LINK);
-                        utils.log(i+"  ->  "+ad.startTime+"  "+ad.end_time+"  "+ ad.ad_text);
                         ads_data.add(ad);
                     }
                 } catch (Exception e) {

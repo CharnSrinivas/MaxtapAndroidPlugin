@@ -45,8 +45,6 @@ public class GaAnalyticsHelper {
             impressionProperties.putString("update_time", impressionData.update_time);
             //impressionProperties.putString("create_time",impressionData.create_time);
             impressionProperties.putInt("ad_viewed_count", impressionData.ad_viewed_count);
-
-            utils.log("Impression Event ");
             analytics.logEvent("impression", impressionProperties);
         }catch (Exception e){
             utils.printError(e);

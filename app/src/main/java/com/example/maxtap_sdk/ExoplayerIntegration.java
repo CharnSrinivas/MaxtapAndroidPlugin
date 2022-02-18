@@ -2,6 +2,7 @@ package com.example.maxtap_sdk;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -40,9 +41,9 @@ public class ExoplayerIntegration extends AppCompatActivity {
         exoPlayer.prepare();
         //playing the video.
         exoPlayer.play();
+
         // Initializing
         Maxtap.MaxtapComponent().init(this, playerView, "test_data");
-        // Update ads for every one second
         maxtapAdHandler.postDelayed(maxtapAdRunnable, 500);
     }
 
