@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import com.google.firebase.analytics.FirebaseAnalytics;
+
+import net.maxtap.android_sdk.Config;
 import net.maxtap.android_sdk.Models.ClickEvent;
 import net.maxtap.android_sdk.Models.ImpressionEvent;
 
@@ -45,7 +47,7 @@ public class GaAnalyticsHelper {
             impressionProperties.putString("update_time", impressionData.update_time);
             //impressionProperties.putString("create_time",impressionData.create_time);
             impressionProperties.putInt("ad_viewed_count", impressionData.ad_viewed_count);
-            analytics.logEvent("impression", impressionProperties);
+            analytics.logEvent(Config.ImpressionEventName, impressionProperties);
         }catch (Exception e){
             utils.printError(e);
             e.printStackTrace();
@@ -55,6 +57,8 @@ public class GaAnalyticsHelper {
     public void logClickEvent(ClickEvent clickData){
 
         Bundle clickProperties = new Bundle();
+        try {
+
         clickProperties.putString("advertiser_name",clickData.advertiser_name);
         clickProperties.putString("article_type",clickData.article_type);
         clickProperties.putString("caption",clickData.caption);
@@ -81,6 +85,10 @@ public class GaAnalyticsHelper {
         clickProperties.putString("update_time",clickData.update_time);
         //clickProperties.putString("create_time",clickData.create_time);
         clickProperties.putInt("no_of_clicks",clickData.times_clicked);
-        analytics.logEvent("click",clickProperties);
+        analytics.logEvent(Config.ClickEventName,clickProperties);
+        }catch (Exception e){
+            utils.printError(e);
+            e.printStackTrace();
+        }
     }
 }

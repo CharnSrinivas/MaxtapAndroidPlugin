@@ -11,7 +11,8 @@ public final class Config {
     public  final static String DefaultAdCaption = "Get this now";
     public final static String MaxtapLog ="maxtap_log";
     public final static String MaxtapError = "maxtap_err";
-
+    public final static String ImpressionEventName = "impression";
+    public final static String ClickEventName = "click";
     public static class AdParms {
         public final static String UPDATE_TIME = "update_time";
         public final static String REDIRECT_LINK_TYPE ="redirect_link_type";
