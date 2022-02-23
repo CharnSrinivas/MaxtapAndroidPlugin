@@ -77,7 +77,7 @@ public class GaAnalyticsHelper {
     public void logClickEvent(ClickEvent clickData) {
 
 //        Bundle gaClickProps = new Bundle();
-        Map<String, String> flurryClickImpression = new HashMap<>();
+        Map<String, String> flurryClickProps = new HashMap<>();
         try {
             // Google Analytics
         /*    gaClickProps.putString("advertiser_name", clickData.advertiser_name);
@@ -108,18 +108,18 @@ public class GaAnalyticsHelper {
             gaClickProps.putInt("no_of_clicks", clickData.times_clicked);*/
 
             // Flurry
-            flurryClickImpression.put("advertiser_name", clickData.advertiser_name);
-            flurryClickImpression.put("gender", clickData.gender);
-            flurryClickImpression.put("content_language", clickData.content_language);
-            flurryClickImpression.put("article_type", clickData.article_type);
-            flurryClickImpression.put("client_name", clickData.client_name);
-            flurryClickImpression.put("content_name", clickData.content_name);
-            flurryClickImpression.put("subcategory", clickData.subcategory);
-            flurryClickImpression.put("category", clickData.category);
-            flurryClickImpression.put("show_name", clickData.show_name);
-            flurryClickImpression.put("content_id", clickData.content_id);
+            flurryClickProps.put("advertiser_name", clickData.advertiser_name);
+            flurryClickProps.put("gender", clickData.gender);
+            flurryClickProps.put("content_language", clickData.content_language);
+            flurryClickProps.put("article_type", clickData.article_type);
+            flurryClickProps.put("client_name", clickData.client_name);
+            flurryClickProps.put("content_name", clickData.content_name);
+            flurryClickProps.put("subcategory", clickData.subcategory);
+            flurryClickProps.put("category", clickData.category);
+            flurryClickProps.put("show_name", clickData.show_name);
+            flurryClickProps.put("content_id", clickData.content_id);
 
-            FlurryAgent.logEvent("click", flurryClickImpression, true);
+            FlurryAgent.logEvent("click", flurryClickProps, true);
 //            analytics.logEvent(Config.ClickEventName, gaClickProps);
         } catch (Exception e) {
             utils.printError(e);
