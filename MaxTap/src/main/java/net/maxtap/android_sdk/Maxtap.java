@@ -8,5 +8,4 @@ public class Maxtap {
         if (MaxtapComponentInstance == null) MaxtapComponentInstance = new Component();
         return MaxtapComponentInstance;
     }
-
 }

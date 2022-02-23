@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.flurry.android.FlurryAgent;
+import com.flurry.android.FlurryPerformance;
+
 import net.maxtap.android_sdk.Models.AdData;
 import net.maxtap.android_sdk.utils.GaAnalyticsHelper;
 import net.maxtap.android_sdk.utils.HttpHandler;
@@ -41,12 +46,22 @@ public class Component extends AppCompatActivity {
     boolean isInitializing = false;
     boolean isInitialized = false;
 
-
     public void init(Context context, View player, String content_id) {
         try {
             if (isInitialized||isInitializing) {
                 remove();
             }
+
+//            new FlurryAgent.Builder().withDataSaleOptOut(false)
+//                    .withCaptureUncaughtExceptions(true)
+//                    .withIncludeBackgroundSessionsInMetrics(true)
+//                    .withLogLevel(Log.VERBOSE)
+//                    .withPerformanceMetrics(FlurryPerformance.ALL)
+//                    .build(this, "K2FVCKZ9Y5YDYZWBD2FC");
+
+            new FlurryAgent.Builder()
+                    .withLogEnabled(true).build(context, "3WXJKNQB4S8NHDXMKSM6");
+
             this.context = context;
             this.video_player = player;
             this.content_id = content_id;
@@ -77,8 +92,8 @@ public class Component extends AppCompatActivity {
                         boolean is_valid_data = true;
                         JSONObject json_ad = ad_data_json.getJSONObject(i);
                     /*
-                    Checking if every ad data have required parameters.
-                    if not then removing or (not showing)  only that particular ad
+                      Checking if every ad data have required parameters.
+                      if not then removing or (not showing)  only that particular ad
                      */
                         for (String parm : Config.AdParms.REQUIRED) {
                             if (!json_ad.has(parm)) {
@@ -168,7 +183,6 @@ public class Component extends AppCompatActivity {
             currentPosition /= 1000;
             if (ad_container == null) return;
             if (ads_data == null)return;
-
             boolean can_ad_visible = false;
             for (int index = 0; index < ads_data.size(); index++) {
                 AdData ad_data = ads_data.get(index);
@@ -186,7 +200,8 @@ public class Component extends AppCompatActivity {
                 */
                 String redirect_link = ad_data.redirect_link;
                 boolean is_in_range = (currentPosition >= startTime && currentPosition <= endTime);
-                boolean can_prefetch = (startTime - currentPosition <= Config.AdImagePrecacheingTime && startTime - currentPosition >= 0)
+                boolean can_prefetch =
+                        (startTime - currentPosition <= Config.AdImagePrecacheingTime && startTime - currentPosition >= 0)
                         && !ad_data.image_loaded && !ad_data.image_loading;
 
                 // Checking if image is already loaded (or) loading

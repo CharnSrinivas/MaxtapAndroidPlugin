@@ -2,14 +2,10 @@ package com.example.maxtap_sdk;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.ui.PlayerView;
-
 import net.maxtap.android_sdk.Maxtap;
 
 public class ExoplayerIntegration extends AppCompatActivity {
@@ -41,7 +37,6 @@ public class ExoplayerIntegration extends AppCompatActivity {
         exoPlayer.prepare();
         //playing the video.
         exoPlayer.play();
-
         // Initializing
         Maxtap.MaxtapComponent().init(this, playerView, "test_data");
         maxtapAdHandler.postDelayed(maxtapAdRunnable, 500);
