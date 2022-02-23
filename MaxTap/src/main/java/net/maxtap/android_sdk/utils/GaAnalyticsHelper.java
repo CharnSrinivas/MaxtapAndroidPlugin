@@ -1,14 +1,12 @@
 package net.maxtap.android_sdk.utils;
 
 import android.content.Context;
-import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
 import com.flurry.android.FlurryAgent;
-import com.google.firebase.analytics.FirebaseAnalytics;
+//import com.google.firebase.analytics.FirebaseAnalytics;
 
-import net.maxtap.android_sdk.Config;
 import net.maxtap.android_sdk.Models.ClickEvent;
 import net.maxtap.android_sdk.Models.ImpressionEvent;
 
@@ -17,18 +15,19 @@ import java.util.Map;
 
 public class GaAnalyticsHelper {
     Context context;
-    FirebaseAnalytics analytics;
+//    FirebaseAnalytics analytics;
 
     public GaAnalyticsHelper(Context context) {
         this.context = context;
-        analytics = FirebaseAnalytics.getInstance(context);
+//        analytics = FirebaseAnalytics.getInstance(context);
     }
 
     public void logImpressionEvent(@NonNull ImpressionEvent impressionData) {
         try {
-            Bundle gaImpressionProps = new Bundle();
+//            Bundle gaImpressionProps = new Bundle();
+            Map<String, String> flurryImpressionProps = new HashMap<>();
             // Google Analytics
-            gaImpressionProps.putString("advertiser_name", impressionData.advertiser_name);
+    /*        gaImpressionProps.putString("advertiser_name", impressionData.advertiser_name);
             gaImpressionProps.putString("article_type", impressionData.article_type);
             gaImpressionProps.putString("caption", impressionData.caption);
             gaImpressionProps.putString("caption_regional_language", impressionData.caption_regional_language);
@@ -53,19 +52,21 @@ public class GaAnalyticsHelper {
             gaImpressionProps.putString("subcategory", impressionData.subcategory);
             gaImpressionProps.putString("update_time", impressionData.update_time);
             gaImpressionProps.putInt("ad_viewed_count", impressionData.ad_viewed_count);
-
+*/
             // Flurry
-            FlurryAgent.logEvent("advertiser_name-"+impressionData.advertiser_name);
-            FlurryAgent.logEvent("gender-"+impressionData.gender);
-            FlurryAgent.logEvent("content-language"+impressionData.content_language);
-            FlurryAgent.logEvent("article-type"+impressionData.article_type);
-            FlurryAgent.logEvent("client_name-"+impressionData.client_name);
-            FlurryAgent.logEvent("content_name-"+impressionData.content_name);
-            FlurryAgent.logEvent("subcategory-"+impressionData.subcategory);
-            FlurryAgent.logEvent("category-"+impressionData.category);
-            FlurryAgent.logEvent("show_name-"+impressionData.show_name);
+            flurryImpressionProps.put("advertiser_name", impressionData.advertiser_name);
+            flurryImpressionProps.put("gender", impressionData.gender);
+            flurryImpressionProps.put("content_language", impressionData.content_language);
+            flurryImpressionProps.put("article_type", impressionData.article_type);
+            flurryImpressionProps.put("client_name", impressionData.client_name);
+            flurryImpressionProps.put("content_name", impressionData.content_name);
+            flurryImpressionProps.put("subcategory", impressionData.subcategory);
+            flurryImpressionProps.put("category", impressionData.category);
+            flurryImpressionProps.put("show_name", impressionData.show_name);
+            flurryImpressionProps.put("content_id", impressionData.content_id);
 
-            analytics.logEvent(Config.ImpressionEventName, gaImpressionProps);
+            FlurryAgent.logEvent("impression", flurryImpressionProps, true);
+//            analytics.logEvent(Config.ImpressionEventName, gaImpressionProps);
 
         } catch (Exception e) {
             utils.printError(e);
@@ -75,11 +76,11 @@ public class GaAnalyticsHelper {
 
     public void logClickEvent(ClickEvent clickData) {
 
-        Bundle gaClickProps = new Bundle();
-        Map<String, String> flurryClickProps = new HashMap<>();
+//        Bundle gaClickProps = new Bundle();
+        Map<String, String> flurryClickImpression = new HashMap<>();
         try {
             // Google Analytics
-            gaClickProps.putString("advertiser_name", clickData.advertiser_name);
+        /*    gaClickProps.putString("advertiser_name", clickData.advertiser_name);
             gaClickProps.putString("article_type", clickData.article_type);
             gaClickProps.putString("caption", clickData.caption);
             gaClickProps.putString("caption_regional_language", clickData.caption_regional_language);
@@ -104,22 +105,22 @@ public class GaAnalyticsHelper {
             gaClickProps.putString("subcategory", clickData.subcategory);
             gaClickProps.putString("update_time", clickData.update_time);
             // clickProperties.putString("create_time",clickData.create_time);
-            gaClickProps.putInt("no_of_clicks", clickData.times_clicked);
+            gaClickProps.putInt("no_of_clicks", clickData.times_clicked);*/
 
             // Flurry
-            FlurryAgent.logEvent("click-advertiser_name-"+clickData.advertiser_name);
-            FlurryAgent.logEvent("click-gender-"+clickData.gender);
-            FlurryAgent.logEvent("click-content-language-"+clickData.content_language);
-            FlurryAgent.logEvent("click-article-type-"+clickData.article_type);
-            FlurryAgent.logEvent("click-client_name-"+clickData.client_name);
-            FlurryAgent.logEvent("click-content_name-"+clickData.content_name);
-            FlurryAgent.logEvent("click-subcategory-"+clickData.subcategory);
-            FlurryAgent.logEvent("click-category-"+clickData.category);
-            FlurryAgent.logEvent("click-show_name-"+clickData.show_name);
+            flurryClickImpression.put("advertiser_name", clickData.advertiser_name);
+            flurryClickImpression.put("gender", clickData.gender);
+            flurryClickImpression.put("content_language", clickData.content_language);
+            flurryClickImpression.put("article_type", clickData.article_type);
+            flurryClickImpression.put("client_name", clickData.client_name);
+            flurryClickImpression.put("content_name", clickData.content_name);
+            flurryClickImpression.put("subcategory", clickData.subcategory);
+            flurryClickImpression.put("category", clickData.category);
+            flurryClickImpression.put("show_name", clickData.show_name);
+            flurryClickImpression.put("content_id", clickData.content_id);
 
-            
-            analytics.logEvent(Config.ClickEventName, gaClickProps);
-
+            FlurryAgent.logEvent("click", flurryClickImpression, true);
+//            analytics.logEvent(Config.ClickEventName, gaClickProps);
         } catch (Exception e) {
             utils.printError(e);
             e.printStackTrace();
