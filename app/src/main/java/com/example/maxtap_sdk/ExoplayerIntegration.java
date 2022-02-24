@@ -2,6 +2,8 @@ package com.example.maxtap_sdk;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
+
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
@@ -44,8 +46,25 @@ public class ExoplayerIntegration extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        exoPlayer.stop();
+        exoPlayer.release();
         maxtapAdHandler.removeCallbacks(maxtapAdRunnable);
+        Maxtap.MaxtapComponent().remove();
         super.onDestroy();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((Maxtap.MaxtapComponent().webView != null && keyCode == KeyEvent.KEYCODE_BACK) && Maxtap.MaxtapComponent().webView.canGoBack()) {
+            Maxtap.MaxtapComponent().webView.goBack();
+            return true;
+        }
+        if((Maxtap.MaxtapComponent().webView != null && keyCode == KeyEvent.KEYCODE_BACK) && ! Maxtap.MaxtapComponent().webView.canGoBack()){
+            if(Maxtap.MaxtapComponent().closeWebView()){
+                return true;
+            }
+            return  super.onKeyDown(keyCode, event);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

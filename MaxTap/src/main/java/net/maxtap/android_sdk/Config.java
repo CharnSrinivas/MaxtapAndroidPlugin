@@ -2,25 +2,29 @@ package net.maxtap.android_sdk;
 
 import android.graphics.Color;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public final class Config {
 
     public final static String CloudBucketUrl = "https://storage.googleapis.com/publicmaxtap-prod.appspot.com/data/";
     public final static int AdImagePrecacheingTime = 15;
     public final static String AdTextColor = "#ffffff";
     public final static int AdBgColor = Color.argb(80, 0, 0, 0);
-    public  final static String DefaultAdCaption = "Get this now";
-    public final static String MaxtapLog ="maxtap_log";
+    public final static String DefaultAdCaption = "Get this now";
+    public final static String MaxtapLog = "maxtap_log";
     public final static String MaxtapError = "maxtap_err";
     public final static String ImpressionEventName = "impression";
     public final static String ClickEventName = "click";
+
     public static class AdParms {
         public final static String UPDATE_TIME = "update_time";
-        public final static String REDIRECT_LINK_TYPE ="redirect_link_type";
+        public final static String REDIRECT_LINK_TYPE = "redirect_link_type";
         public final static String START_TIME = "start_time";
         public final static String END_TIME = "end_time";
         public final static String IMAGE_LINK = "image_link";
         public final static String CAPTION_REGIONAL_LANGUAGE = "caption_regional_language";
-        public final static String CAPTION="caption";
+        public final static String CAPTION = "caption";
         public final static String CLIENT_NAME = "client_name";
         public final static String CONTENT_ID = "content_id";
         public final static String CONTENT_NAME = "content_name";
@@ -38,9 +42,30 @@ public final class Config {
         public final static String SUBCATEGORY = "subcategory";
         public final static String DOCUMENT_ID = "document_id";
         public final static String CONTENT_LINK = "content_link";
-        public  final static String REDIRECT_LINK = "redirect_link";
-        public final static String CREATE_TIME ="create_time";
+        public final static String REDIRECT_LINK = "redirect_link";
+        public final static String CREATE_TIME = "create_time";
 
-        public final  static String[] REQUIRED ={START_TIME,END_TIME,IMAGE_LINK};
+        public final static String[] REQUIRED = {START_TIME, END_TIME, IMAGE_LINK};
+    }
+
+    public static class ApplicationPackageNames {
+
+        public final static String MYNTRA = "com.myntra.android";
+        public final static String FLIPKART = "com.flipkart.android";
+        public final   static Map<String,String> PackageNames = new  HashMap<>();
+        static {
+            PackageNames.put(AdvertiserDomainNames.MYNTRA,ApplicationPackageNames.MYNTRA);
+            PackageNames.put(AdvertiserDomainNames.FLIPKART,ApplicationPackageNames.FLIPKART);
+        }
+    }
+
+    public static class AdvertiserDomainNames {
+        public final static String MYNTRA = "myntra";
+        public final static String FLIPKART = "flipkart";
+        public static String DomainNames[] =
+                {
+                        FLIPKART,
+                        MYNTRA
+                };
     }
 }

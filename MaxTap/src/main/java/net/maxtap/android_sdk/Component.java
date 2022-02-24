@@ -1,5 +1,6 @@
 package net.maxtap.android_sdk;
 
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,19 +12,21 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.flurry.android.FlurryAgent;
-import com.flurry.android.FlurryPerformance;
-
 import net.maxtap.android_sdk.Models.AdData;
-import net.maxtap.android_sdk.utils.GaAnalyticsHelper;
+import net.maxtap.android_sdk.utils.AnalyticsHelper;
 import net.maxtap.android_sdk.utils.HttpHandler;
 import net.maxtap.android_sdk.utils.ImageCache;
 import net.maxtap.android_sdk.utils.utils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +35,9 @@ import java.util.ArrayList;
 
 public class Component extends AppCompatActivity {
 
-    Context context = null;
+    public WebView webView;
+    Context host_context = null;
+    Activity host_activity = null;
     ImageView adImage = null;
     TextView adText = null;
     FrameLayout ad_container = null;
@@ -42,35 +47,62 @@ public class Component extends AppCompatActivity {
     String content_id = null;
     int screen_width, screen_height;
     int current_ad_index = -1;
-    GaAnalyticsHelper analyticsHelper;
+    AnalyticsHelper analyticsHelper;
     boolean isInitializing = false;
     boolean isInitialized = false;
+    private boolean web_view_closed = false;
 
-    public void init(Context context, View player, String content_id) {
+    public void openWebView(String url) {
         try {
-            if (isInitialized||isInitializing) {
+            DisplayMetrics dm = new DisplayMetrics();
+            web_view_closed = false;
+            host_activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+            webView = new WebView(this.host_context.getApplicationContext());
+            WebViewClient webViewClient = new WebViewClient();
+            WebSettings webSettings = webView.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+            webView.setWebViewClient(webViewClient);
+            webView.loadUrl(url);
+            webView.setVisibility(View.VISIBLE);
+            host_activity.addContentView(webView, new ViewGroup.LayoutParams(dm.widthPixels, dm.heightPixels));
+        }catch (Exception e){
+            utils.printError(e);
+            e.printStackTrace();
+        }
+    }
+
+    public boolean closeWebView() {
+        if (!web_view_closed) {
+            webView.setVisibility(View.INVISIBLE);
+            webView.destroy();
+            web_view_closed = true;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void init(Activity activity, View player, String content_id) {
+        try {
+
+
+            if (isInitialized || isInitializing) {
                 remove();
             }
-
-//            new FlurryAgent.Builder().withDataSaleOptOut(false)
-//                    .withCaptureUncaughtExceptions(true)
-//                    .withIncludeBackgroundSessionsInMetrics(true)
-//                    .withLogLevel(Log.VERBOSE)
-//                    .withPerformanceMetrics(FlurryPerformance.ALL)
-//                    .build(this, "K2FVCKZ9Y5YDYZWBD2FC");
-
-            new FlurryAgent.Builder()
-                    .withLogEnabled(true).build(context, "3WXJKNQB4S8NHDXMKSM6");
-
-            this.context = context;
+            this.host_context = activity.getApplicationContext();
+            this.host_activity = activity;
             this.video_player = player;
             this.content_id = content_id;
-            this.analyticsHelper = new GaAnalyticsHelper(context);
+            this.analyticsHelper = new AnalyticsHelper(host_context);
             isInitializing = true;
-            // Waiting until video player is totally rendered
+            //
+//            new FlurryAgent.Builder()
+//                      .withLogEnabled(true).build(host_context, "3WXJKNQB4S8NHDXMKSM6");
+//            // Waiting until video player is totally rendered
+
             player.post(() -> {
                 DisplayMetrics displayMetrics = new DisplayMetrics();
-                ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                host_activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 screen_height = displayMetrics.heightPixels;
                 screen_width = displayMetrics.widthPixels;
                 initializeComponent();
@@ -108,9 +140,9 @@ public class Component extends AppCompatActivity {
                         AdData ad = new AdData();
                         ad.startTime = json_ad.getInt(Config.AdParms.START_TIME);
                         ad.end_time = json_ad.getInt(Config.AdParms.END_TIME);
-                        ad.ad_text =json_ad.has(Config.AdParms.CAPTION_REGIONAL_LANGUAGE)? json_ad.getString(Config.AdParms.CAPTION_REGIONAL_LANGUAGE) :
-                        json_ad.has(Config.AdParms.CAPTION) ? json_ad.getString(Config.AdParms.CAPTION):
-                        json_ad.has(Config.AdParms.ARTICLE_TYPE) ? "Get this "+json_ad.getString(Config.AdParms.ARTICLE_TYPE)+" now": Config.DefaultAdCaption;
+                        ad.ad_text = json_ad.has(Config.AdParms.CAPTION_REGIONAL_LANGUAGE) ? json_ad.getString(Config.AdParms.CAPTION_REGIONAL_LANGUAGE) :
+                                json_ad.has(Config.AdParms.CAPTION) ? json_ad.getString(Config.AdParms.CAPTION) :
+                                        json_ad.has(Config.AdParms.ARTICLE_TYPE) ? "Get this " + json_ad.getString(Config.AdParms.ARTICLE_TYPE) + " now" : Config.DefaultAdCaption;
 
                         ad.imageLink = json_ad.getString(Config.AdParms.IMAGE_LINK);
                         ad.redirect_link = json_ad.getString(Config.AdParms.REDIRECT_LINK);
@@ -127,22 +159,20 @@ public class Component extends AppCompatActivity {
     }
 
     private void initializeComponent() {
-        adImage = new ImageView(context);
-        adText = new TextView(context);
+        adImage = new ImageView(host_context);
+        adText = new TextView(host_context);
         adText.setTextSize(14);
         adText.setTextColor(Color.parseColor(Config.AdTextColor));
         adText.setPadding(20, 0, 0, 0);
 
         // Initializing frame layout
-        ad_container = new FrameLayout(context);
+        ad_container = new FrameLayout(host_context);
         ad_container.setBackgroundColor(Config.AdBgColor);
         ad_container.setId(R.id.maxtap_container_id);
         ad_container.setVisibility(View.GONE);
         // Ad container layout
         FrameLayout.LayoutParams ad_container_parms = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
         /*          Configuring ad layout according screen width and screen height          */
-
         int img_width;
         if (this.screen_height > this.screen_width) {
             // Ad Portrait config
@@ -182,7 +212,7 @@ public class Component extends AppCompatActivity {
         try {
             currentPosition /= 1000;
             if (ad_container == null) return;
-            if (ads_data == null)return;
+            if (ads_data == null) return;
             boolean can_ad_visible = false;
             for (int index = 0; index < ads_data.size(); index++) {
                 AdData ad_data = ads_data.get(index);
@@ -201,8 +231,8 @@ public class Component extends AppCompatActivity {
                 String redirect_link = ad_data.redirect_link;
                 boolean is_in_range = (currentPosition >= startTime && currentPosition <= endTime);
                 boolean can_prefetch =
-                        (startTime - currentPosition <= Config.AdImagePrecacheingTime && startTime - currentPosition >= 0)
-                        && !ad_data.image_loaded && !ad_data.image_loading;
+                        (startTime - currentPosition <= Config.AdImagePrecacheingTime)
+                                && !ad_data.image_loaded && !ad_data.image_loading;
 
                 // Checking if image is already loaded (or) loading
                 if (can_prefetch) {
@@ -222,11 +252,16 @@ public class Component extends AppCompatActivity {
                         int finalIndex = index;
                         ad_container.setOnClickListener((View ad) -> {
                             // ⬆️ Increasing no.of ad clicks
-                            ad_data.no_of_clicks++;
-                            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(redirect_link)));
                             try {
+                                ad_data.no_of_clicks++;
                                 // 📈 Triggering analytics click event
-                                analyticsHelper.logClickEvent(utils.createGAClickProperties(ad_data_json.getJSONObject(finalIndex), ad_data));
+                                String domain_name=  utils.getDomainName(redirect_link);
+                                if(domain_name != null &&  utils.isApplicationInstalled(host_activity,domain_name)){
+                                    host_activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(redirect_link)));
+                                }else{
+                                    openWebView(redirect_link);
+                                }
+                                analyticsHelper.logClickEvent(utils.createClickProperties(ad_data_json.getJSONObject(finalIndex), ad_data));
                             } catch (JSONException e) {
                                 utils.printError(e);
                                 e.printStackTrace();
@@ -235,7 +270,7 @@ public class Component extends AppCompatActivity {
                         //⬆️ Increasing no.of ad views
                         ad_data.no_of_views++;
                         // Triggering analytics click event
-                        analyticsHelper.logImpressionEvent(utils.createGAImpressionProperties(ad_data_json.getJSONObject(index), ad_data));
+                        analyticsHelper.logImpressionEvent(utils.createImpressionProperties(ad_data_json.getJSONObject(index), ad_data));
                     }
                 }
             }
@@ -254,8 +289,8 @@ public class Component extends AppCompatActivity {
     public void remove() {
         try {
             //❌ Removing ad component from layout
-            if (context!=null && ((Activity) context).findViewById(R.id.maxtap_container_id) != null) {
-                ((ViewGroup) video_player).removeView(((Activity) context).findViewById(R.id.maxtap_container_id));
+            if (host_activity != null && (host_activity.findViewById(R.id.maxtap_container_id)) != null) {
+                ((ViewGroup) video_player).removeView(((Activity) host_context).findViewById(R.id.maxtap_container_id));
             }
             this.ad_container = null;
             this.isInitializing = false;
@@ -263,7 +298,7 @@ public class Component extends AppCompatActivity {
             this.ads_data = new ArrayList<>();
             this.ad_data_json = new JSONArray();
             this.video_player = null;
-            this.context = null;
+            this.host_context = null;
             this.content_id = null;
             this.current_ad_index = -1;
         } catch (Exception e) {

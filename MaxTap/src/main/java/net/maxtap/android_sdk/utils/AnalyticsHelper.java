@@ -7,21 +7,21 @@ import androidx.annotation.NonNull;
 import com.flurry.android.FlurryAgent;
 //import com.google.firebase.analytics.FirebaseAnalytics;
 
+import net.maxtap.android_sdk.Config;
 import net.maxtap.android_sdk.Models.ClickEvent;
 import net.maxtap.android_sdk.Models.ImpressionEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class GaAnalyticsHelper {
+public class AnalyticsHelper {
     Context context;
 //    FirebaseAnalytics analytics;
 
-    public GaAnalyticsHelper(Context context) {
+    public AnalyticsHelper(Context context) {
         this.context = context;
 //        analytics = FirebaseAnalytics.getInstance(context);
     }
-
     public void logImpressionEvent(@NonNull ImpressionEvent impressionData) {
         try {
 //            Bundle gaImpressionProps = new Bundle();
@@ -65,9 +65,8 @@ public class GaAnalyticsHelper {
             flurryImpressionProps.put("show_name", impressionData.show_name);
             flurryImpressionProps.put("content_id", impressionData.content_id);
 
-            FlurryAgent.logEvent("impression", flurryImpressionProps, true);
+            FlurryAgent.logEvent(Config.ImpressionEventName, flurryImpressionProps, true);
 //            analytics.logEvent(Config.ImpressionEventName, gaImpressionProps);
-
         } catch (Exception e) {
             utils.printError(e);
             e.printStackTrace();
@@ -119,7 +118,7 @@ public class GaAnalyticsHelper {
             flurryClickProps.put("show_name", clickData.show_name);
             flurryClickProps.put("content_id", clickData.content_id);
 
-            FlurryAgent.logEvent("click", flurryClickProps, true);
+            FlurryAgent.logEvent(Config.ClickEventName, flurryClickProps, true);
 //            analytics.logEvent(Config.ClickEventName, gaClickProps);
         } catch (Exception e) {
             utils.printError(e);

@@ -2,6 +2,7 @@ package com.example.maxtap_sdk;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 
 import com.brightcove.player.model.DeliveryType;
 import com.brightcove.player.model.Video;
@@ -45,7 +46,23 @@ public class BrightcovePlayerIntegration extends BrightcovePlayer {
     @Override
     protected void onDestroy() {
         maxtapAdHandler.removeCallbacks(maxtapAdRunnable);
+        Maxtap.MaxtapComponent().remove();
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((Maxtap.MaxtapComponent().webView != null && keyCode == KeyEvent.KEYCODE_BACK) && Maxtap.MaxtapComponent().webView.canGoBack()) {
+            Maxtap.MaxtapComponent().webView.goBack();
+            return true;
+        }
+        if((Maxtap.MaxtapComponent().webView != null && keyCode == KeyEvent.KEYCODE_BACK) && ! Maxtap.MaxtapComponent().webView.canGoBack()){
+            if(Maxtap.MaxtapComponent().closeWebView()){
+                return true;
+            }
+            return  super.onKeyDown(keyCode, event);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }
