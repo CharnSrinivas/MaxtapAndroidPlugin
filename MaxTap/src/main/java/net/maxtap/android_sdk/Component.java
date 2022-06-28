@@ -5,18 +5,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,12 +41,13 @@ public class Component extends AppCompatActivity {
     Activity host_activity = null;
     ImageView adImage = null;
     TextView adText = null;
-    FrameLayout ad_container = null;
+    ViewStub ad_container = null;
     View video_player = null;
     ArrayList<AdData> ads_data = new ArrayList<>();
     JSONArray ad_data_json = new JSONArray();
     String content_id = null;
     int screen_width, screen_height;
+    int ad_format= 1;
     int current_ad_index = -1;
     AnalyticsHelper analyticsHelper;
     boolean isInitializing = false;
@@ -65,7 +67,7 @@ public class Component extends AppCompatActivity {
             webView.loadUrl(url);
             webView.setVisibility(View.VISIBLE);
             host_activity.addContentView(webView, new ViewGroup.LayoutParams(dm.widthPixels, dm.heightPixels));
-        }catch (Exception e){
+        } catch (Exception e) {
             utils.printError(e);
             e.printStackTrace();
         }
@@ -82,10 +84,9 @@ public class Component extends AppCompatActivity {
         }
     }
 
-    public void init(Activity activity, View player, String content_id) {
+    public void init(Activity activity, View player, String content_id,int ad_format) {
+        this.ad_format =ad_format;
         try {
-
-
             if (isInitialized || isInitializing) {
                 remove();
             }
@@ -160,55 +161,37 @@ public class Component extends AppCompatActivity {
     }
 
     private void initializeComponent() {
-        adImage = new ImageView(host_context);
-        adText = new TextView(host_context);
-        adText.setTextSize(14);
-        adText.setTextColor(Color.parseColor(Config.AdTextColor));
-        adText.setPadding(20, 0, 0, 0);
-        // Initializing frame layout
-        ad_container = new FrameLayout(host_context);
-        ad_container.setBackgroundColor(Config.AdBgColor);
+        ad_container = new ViewStub(host_context);
         ad_container.setId(R.id.maxtap_container_id);
         ad_container.setVisibility(View.GONE);
+        if(ad_format == 1)
+        {ad_container.setLayoutResource(R.layout.ad_layout_1);}
         // Ad container layout
         FrameLayout.LayoutParams ad_container_parms = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         /*          Configuring ad layout according screen width and screen height          */
-        int img_width;
         if (this.screen_height > this.screen_width) {
-            // Ad Portrait config
-            img_width = this.screen_height * 8 / 100;
-            ad_container_parms.bottomMargin = this.screen_height * 10 / 100;
-            adText.setMaxWidth((int) (2.5 * img_width));
+            ad_container_parms.bottomMargin = this.screen_height * 8/100;
         } else {
             // Ad Landscape config
-            img_width = this.screen_width * 10 / 100;
             ad_container_parms.bottomMargin = this.screen_height * 12 / 100;
-            adText.setMaxWidth((2 * img_width));
         }
-        // Ad Image layout
-        FrameLayout.LayoutParams imageParams = new FrameLayout.LayoutParams(img_width, img_width);
-        imageParams.setMargins(10, 10, 10, 10);
-        imageParams.gravity = Gravity.RIGHT;
-        adImage.setLayoutParams(imageParams);
 
-        // Text layout
-        FrameLayout.LayoutParams textParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-        textParams.setMargins(0, 0, img_width, 0);
-        textParams.gravity = Gravity.CENTER_VERTICAL;
-        adText.setLayoutParams(textParams);
 
         ad_container_parms.gravity = Gravity.RIGHT | Gravity.BOTTOM;
         ad_container_parms.rightMargin = this.screen_width / 200;
 
-        // Adding views to FrameLayout (Ad container)
-        ad_container.addView(adImage);
-        ad_container.addView(adText);
         // Putting Ad Container in video view
         ((ViewGroup) video_player).addView(ad_container, ad_container_parms);
-        isInitialized = true;
+        View container=  ad_container.inflate();
+        container.post(()->{
+            adImage = host_activity.findViewById(R.id.ad_image);
+            adText = host_activity.findViewById(R.id.ad_text);
+            isInitialized = true;
+        });
     }
 
     public void updateAds(long currentPosition) {
+        if(!isInitialized)return;
         try {
             currentPosition /= 1000;
             if (ad_container == null) return;
@@ -255,10 +238,10 @@ public class Component extends AppCompatActivity {
                             try {
                                 ad_data.no_of_clicks++;
                                 // 📈 Triggering analytics click event
-                                String domain_name=  utils.getDomainName(redirect_link);
-                                if(domain_name != null &&  utils.isApplicationInstalled(host_activity,domain_name)){
+                                String domain_name = utils.getDomainName(redirect_link);
+                                if (domain_name != null && utils.isApplicationInstalled(host_activity, domain_name)) {
                                     host_activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(redirect_link)));
-                                }else{
+                                } else {
                                     openWebView(redirect_link);
                                 }
                                 analyticsHelper.logClickEvent(utils.createClickProperties(ad_data_json.getJSONObject(finalIndex), ad_data));
