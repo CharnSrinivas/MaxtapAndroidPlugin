@@ -2,14 +2,11 @@ package com.example.maxtap_sdk;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import net.maxtap.android_sdk.Maxtap;
-
-
 public class MainActivity extends AppCompatActivity {
     //    private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -17,30 +14,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        findViewById(R.id.brightcove_watch).setOnClickListener((start_button) -> {
-            startActivity(new Intent(MainActivity.this, ContentId.class));
+        this.getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+//        findViewById(R.id.brightcove_watch).setOnClickListener((start_button) -> {
+//            startActivity(new Intent(MainActivity.this, ContentId.class));
+//        });
+        findViewById(R.id.start_btn).setOnClickListener((start_button) -> {
+            startActivity(new Intent(MainActivity.this, HotstarDemo.class));
         });
-        findViewById(R.id.exoplayer_watch).setOnClickListener((start_button) -> {
-            startActivity(new Intent(MainActivity.this, ExoplayerIntegration.class));
-        });
-        findViewById(R.id.open_web_view).setOnClickListener((open_btn) -> {
-            Maxtap.MaxtapComponent().openWebView( "https://google.com");
-        });
+//        findViewById(R.id.open_web_view).setOnClickListener((open_btn) -> {
+//            //com.whatsapp
+//            Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.whatsapp");
+//            if (launchIntent != null) {
+//                startActivity(launchIntent);//null pointer check in case package name was not found
+//            }
+////            Maxtap.MaxtapComponent().openWebView( "https://google.com");
+//        });
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((Maxtap.MaxtapComponent().webView != null && keyCode == KeyEvent.KEYCODE_BACK) && Maxtap.MaxtapComponent().webView.canGoBack()) {
-            Maxtap.MaxtapComponent().webView.goBack();
-            return true;
-        }
-        if((Maxtap.MaxtapComponent().webView != null && keyCode == KeyEvent.KEYCODE_BACK) && ! Maxtap.MaxtapComponent().webView.canGoBack()){
-            if(Maxtap.MaxtapComponent().closeWebView()){
-                return true;
-            }
-            return  super.onKeyDown(keyCode, event);
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 }

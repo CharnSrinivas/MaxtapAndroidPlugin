@@ -64,7 +64,6 @@ public class AnalyticsHelper {
             flurryImpressionProps.put("category", impressionData.category);
             flurryImpressionProps.put("show_name", impressionData.show_name);
             flurryImpressionProps.put("content_id", impressionData.content_id);
-
             FlurryAgent.logEvent(Config.ImpressionEventName, flurryImpressionProps, true);
 //            analytics.logEvent(Config.ImpressionEventName, gaImpressionProps);
         } catch (Exception e) {
@@ -105,7 +104,6 @@ public class AnalyticsHelper {
             gaClickProps.putString("update_time", clickData.update_time);
             // clickProperties.putString("create_time",clickData.create_time);
             gaClickProps.putInt("no_of_clicks", clickData.times_clicked);*/
-
             // Flurry
             flurryClickProps.put("advertiser_name", clickData.advertiser_name);
             flurryClickProps.put("gender", clickData.gender);

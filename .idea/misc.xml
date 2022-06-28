@@ -3,13 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.35260416666666666" />
         <entry key="..\:/Users/Amrit/AndroidStudioProjects/MaxTap_Sdk/app/src/main/res/layout/activity_main.xml" value="0.10009057971014493" />
+        <entry key="app/src/main/res/drawable/ic_baseline_fullscreen_24.xml" value="0.3536458333333333" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/drawable/round_corner.xml" value="0.37604166666666666" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="app/src/main/res/layout/brightcove_player.xml" value="0.21331521739130435" />
         <entry key="app/src/main/res/layout/content_id.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/custom_player_control.xml" value="0.3375" />
         <entry key="app/src/main/res/layout/exoplayer.xml" value="0.21014492753623187" />
+        <entry key="app/src/main/res/layout/hotstar_demo.xml" value="0.2078804347826087" />
+        <entry key="app/src/main/res/layout/track_selection_dialog.xml" value="0.3375" />
         <entry key="app/src/main/res/layout/video_player.xml" value="0.2033514492753623" />
         <entry key="app/src/main/res/xml/xml.xml" value="0.1279128672745694" />
       </map>

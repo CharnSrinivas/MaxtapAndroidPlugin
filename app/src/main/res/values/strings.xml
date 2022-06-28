@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">MaxTap_Sdk</string>
     <string name="ott_player">OTT Player</string>
+    <style parent="ThemeOverlay.AppCompat.Dialog.Alert" name="TrackSelectionDialogThemeOverlay">
 
+        <item name="windowNoTitle">false</item>
+
+    </style>
+    <string name="track_selection_title">Video Quality</string>
 </resources>

@@ -128,12 +128,13 @@ public class Component extends AppCompatActivity {
                       if not then removing or (not showing)  only that particular ad
                      */
                         for (String parm : Config.AdParms.REQUIRED) {
+
                             if (!json_ad.has(parm)) {
                                 is_valid_data = false;
                                 break;
                             }
                         }
-                        // If not valid (requiied)
+                        // If not valid (required)
                         if (!is_valid_data) continue;
 
                         /*Creating ad object with required data and pushing to ads_data array*/
@@ -164,7 +165,6 @@ public class Component extends AppCompatActivity {
         adText.setTextSize(14);
         adText.setTextColor(Color.parseColor(Config.AdTextColor));
         adText.setPadding(20, 0, 0, 0);
-
         // Initializing frame layout
         ad_container = new FrameLayout(host_context);
         ad_container.setBackgroundColor(Config.AdBgColor);
