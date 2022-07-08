@@ -97,7 +97,7 @@ public class HotstarDemo extends AppCompatActivity {
         //playing the video.
         exoPlayer.play();
         // Initializing
-        Maxtap.MaxtapComponent().init(this, playerView, "test_data",1);
+        Maxtap.MaxtapComponent().init(this, playerView, "test_data",2);
         maxtapAdHandler.postDelayed(maxtapAdRunnable, 500);
 
 

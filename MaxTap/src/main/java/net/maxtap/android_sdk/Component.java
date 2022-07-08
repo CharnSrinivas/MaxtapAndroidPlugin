@@ -1,6 +1,4 @@
 package net.maxtap.android_sdk;
-
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +15,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -161,11 +158,15 @@ public class Component extends AppCompatActivity {
     }
 
     private void initializeComponent() {
-        ad_container = new ViewStub(host_context);
+        ad_container = new ViewStub(host_activity);
         ad_container.setId(R.id.maxtap_container_id);
         ad_container.setVisibility(View.GONE);
         if(ad_format == 1)
-        {ad_container.setLayoutResource(R.layout.ad_layout_1);}
+        {
+            ad_container.setLayoutResource(R.layout.ad_layout_1);
+        }else if(ad_format== 2){
+            ad_container.setLayoutResource(R.layout.ad_layout_2);
+        }
         // Ad container layout
         FrameLayout.LayoutParams ad_container_parms = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         /*          Configuring ad layout according screen width and screen height          */
@@ -175,7 +176,6 @@ public class Component extends AppCompatActivity {
             // Ad Landscape config
             ad_container_parms.bottomMargin = this.screen_height * 12 / 100;
         }
-
 
         ad_container_parms.gravity = Gravity.RIGHT | Gravity.BOTTOM;
         ad_container_parms.rightMargin = this.screen_width / 200;
@@ -226,12 +226,17 @@ public class Component extends AppCompatActivity {
                     can_ad_visible = true;
                     if (this.current_ad_index != index && ad_data.image_loaded) {
                         this.current_ad_index = index;
-                        Bitmap bitmap = ImageCache.getInstance().retrieveBitmapFromCache(ad_data.imageLink);
-                        // Show ads if we find cached image data (or) show ad only when image is loaded
-                        if (bitmap == null) break;
                         ad_container.setVisibility(View.VISIBLE);
-                        adImage.setImageBitmap(bitmap);
-                        adText.setText(ad_data.ad_text);
+                        // Check if image element is present in current ad format
+                        if(adImage != null){
+                            Bitmap bitmap = ImageCache.getInstance().retrieveBitmapFromCache(ad_data.imageLink);
+                            // Show ads if we find cached image data (or) show ad only when image is loaded
+                            if (bitmap == null) break;
+                            adImage.setImageBitmap(bitmap);
+                        }
+                        if(adText != null){
+                            adText.setText(ad_data.ad_text);
+                        }
                         int finalIndex = index;
                         ad_container.setOnClickListener((View ad) -> {
                             // ⬆️ Increasing no.of ad clicks
