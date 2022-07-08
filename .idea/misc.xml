@@ -5,6 +5,7 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.35260416666666666" />
         <entry key="..\:/Users/Amrit/AndroidStudioProjects/MaxTap_Sdk/app/src/main/res/layout/activity_main.xml" value="0.10009057971014493" />
+        <entry key="MaxTap/src/main/res/drawable/ad_3_bg.xml" value="0.3536458333333333" />
         <entry key="MaxTap/src/main/res/drawable/ad_bg2.xml" value="0.296875" />
         <entry key="MaxTap/src/main/res/drawable/bg.xml" value="0.3536458333333333" />
         <entry key="MaxTap/src/main/res/drawable/bg_overlay.xml" value="0.19947916666666668" />
@@ -12,7 +13,7 @@
         <entry key="MaxTap/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="MaxTap/src/main/res/layout/ad_layout_1.xml" value="0.25" />
         <entry key="MaxTap/src/main/res/layout/ad_layout_2.xml" value="0.75" />
-        <entry key="MaxTap/src/main/res/layout/ad_layout_3.xml" value="0.2" />
+        <entry key="MaxTap/src/main/res/layout/ad_layout_3.xml" value="0.75" />
         <entry key="app/src/main/res/drawable/ic_baseline_fullscreen_24.xml" value="0.3536458333333333" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/drawable/round_corner.xml" value="0.37604166666666666" />

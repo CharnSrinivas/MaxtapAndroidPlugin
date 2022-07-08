@@ -166,6 +166,8 @@ public class Component extends AppCompatActivity {
             ad_container.setLayoutResource(R.layout.ad_layout_1);
         }else if(ad_format== 2){
             ad_container.setLayoutResource(R.layout.ad_layout_2);
+        }else if(ad_format == 3 ){
+            ad_container.setLayoutResource(R.layout.ad_layout_3);
         }
         // Ad container layout
         FrameLayout.LayoutParams ad_container_parms = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -176,9 +178,16 @@ public class Component extends AppCompatActivity {
             // Ad Landscape config
             ad_container_parms.bottomMargin = this.screen_height * 12 / 100;
         }
+        if(ad_format == 3){
+            //Bottom right alignment
+            ad_container_parms.gravity = Gravity.LEFT | Gravity.BOTTOM;
+            ad_container_parms.leftMargin = this.screen_width / 200;
+        }else{
+            // Bottom left alignment
+            ad_container_parms.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+            ad_container_parms.rightMargin = this.screen_width / 200;
+        }
 
-        ad_container_parms.gravity = Gravity.RIGHT | Gravity.BOTTOM;
-        ad_container_parms.rightMargin = this.screen_width / 200;
 
         // Putting Ad Container in video view
         ((ViewGroup) video_player).addView(ad_container, ad_container_parms);
